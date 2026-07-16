@@ -1,0 +1,28 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "AI一站清"
+    },
+    {
+      "name": "tab_tools",
+      "value": "AI Tools"
+    },
+    {
+      "name": "tab_convert",
+      "value": "Convert"
+    },
+    {
+      "name": "tab_settings",
+      "value": "Settings"
+    },
+    {
+      "name": "microphone_permission_reason",
+      "value": "Used for voice input and recording in web pages"
+    },
+    {
+      "name": "camera_permission_reason",
+      "value": "Used for video calls and photo capture in web pages"
+    }
+  ]
+}

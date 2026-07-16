@@ -1,0 +1,100 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "AI一站清"
+    },
+    {
+      "name": "tab_tools",
+      "value": "工具集"
+    },
+    {
+      "name": "tab_convert",
+      "value": "文本转换"
+    },
+    {
+      "name": "tab_settings",
+      "value": "设置"
+    },
+    {
+      "name": "url_placeholder",
+      "value": "访问网页或保存为应用"
+    },
+    {
+      "name": "category_ai",
+      "value": "AI网址导航"
+    },
+    {
+      "name": "category_search",
+      "value": "搜索引擎"
+    },
+    {
+      "name": "category_saved",
+      "value": "我的保存"
+    },
+    {
+      "name": "convert_title",
+      "value": "AI 文本转换 - Markdown 转纯文本"
+    },
+    {
+      "name": "convert_input",
+      "value": "输入框"
+    },
+    {
+      "name": "convert_output",
+      "value": "输出框"
+    },
+    {
+      "name": "convert_btn",
+      "value": "转换"
+    },
+    {
+      "name": "convert_placeholder",
+      "value": "示例：# 这是一个**标题**"
+    },
+    {
+      "name": "edit_btn",
+      "value": "编辑"
+    },
+    {
+      "name": "done_btn",
+      "value": "完成"
+    },
+    {
+      "name": "add_tool",
+      "value": "添加"
+    },
+    {
+      "name": "settings_dark_mode",
+      "value": "深色模式"
+    },
+    {
+      "name": "settings_theme_color",
+      "value": "主题色彩"
+    },
+    {
+      "name": "settings_about",
+      "value": "关于应用"
+    },
+    {
+      "name": "settings_contact",
+      "value": "联系方式"
+    },
+    {
+      "name": "about_app_title",
+      "value": "关于应用"
+    },
+    {
+      "name": "version",
+      "value": "Version 10.1.0"
+    },
+    {
+      "name": "microphone_permission_reason",
+      "value": "Used for voice input and recording in web pages"
+    },
+    {
+      "name": "camera_permission_reason",
+      "value": "Used for video calls and photo capture in web pages"
+    }
+  ]
+}

@@ -1,0 +1,709 @@
+Ôr@Ÿªassertions¤code´customTransformCache¬dependencies¢id¤meta±moduleSideEffects¬originalCode±originalSourcemap«resolvedIds®sourcemapChainµsyntheticNamedExportsµtransformDependencies®transformFiles¨cacheAstÔrAÚC5if (!("finalizeConstruction" in ViewPU.prototype)) {
+    Reflect.set(ViewPU.prototype, "finalizeConstruction", () => { });
+}
+import pasteboard from "@ohos.pasteboard";
+import { ThemeHelper } from '../common/ThemeHelper';
+class ConvertPage extends ViewPU {
+    constructor(parent, params, __localStorage, elmtId = -1, paramsLambda = undefined, extraInfo) {
+        super(parent, __localStorage, elmtId, extraInfo);
+        if (typeof paramsLambda === "function") {
+            this.paramsGenerator_ = paramsLambda;
+        }
+        this.__inputText = new ObservedPropertySimplePU('', this, "inputText");
+        this.__outputText = new ObservedPropertySimplePU('', this, "outputText");
+        this.__copyBtnText = new ObservedPropertySimplePU('å¤åˆ¶', this, "copyBtnText");
+        this.__currentDate = new ObservedPropertySimplePU('', this, "currentDate");
+        this.__currentTime = new ObservedPropertySimplePU('', this, "currentTime");
+        this.setInitiallyProvidedValue(params);
+        this.finalizeConstruction();
+    }
+    setInitiallyProvidedValue(params) {
+        if (params.inputText !== undefined) {
+            this.inputText = params.inputText;
+        }
+        if (params.outputText !== undefined) {
+            this.outputText = params.outputText;
+        }
+        if (params.copyBtnText !== undefined) {
+            this.copyBtnText = params.copyBtnText;
+        }
+        if (params.currentDate !== undefined) {
+            this.currentDate = params.currentDate;
+        }
+        if (params.currentTime !== undefined) {
+            this.currentTime = params.currentTime;
+        }
+    }
+    updateStateVars(params) {
+    }
+    purgeVariableDependenciesOnElmtId(rmElmtId) {
+        this.__inputText.purgeDependencyOnElmtId(rmElmtId);
+        this.__outputText.purgeDependencyOnElmtId(rmElmtId);
+        this.__copyBtnText.purgeDependencyOnElmtId(rmElmtId);
+        this.__currentDate.purgeDependencyOnElmtId(rmElmtId);
+        this.__currentTime.purgeDependencyOnElmtId(rmElmtId);
+    }
+    aboutToBeDeleted() {
+        this.__inputText.aboutToBeDeleted();
+        this.__outputText.aboutToBeDeleted();
+        this.__copyBtnText.aboutToBeDeleted();
+        this.__currentDate.aboutToBeDeleted();
+        this.__currentTime.aboutToBeDeleted();
+        SubscriberManager.Get().delete(this.id__());
+        this.aboutToBeDeletedInternal();
+    }
+    get inputText() {
+        return this.__inputText.get();
+    }
+    set inputText(newValue) {
+        this.__inputText.set(newValue);
+    }
+    get outputText() {
+        return this.__outputText.get();
+    }
+    set outputText(newValue) {
+        this.__outputText.set(newValue);
+    }
+    get copyBtnText() {
+        return this.__copyBtnText.get();
+    }
+    set copyBtnText(newValue) {
+        this.__copyBtnText.set(newValue);
+    }
+    get currentDate() {
+        return this.__currentDate.get();
+    }
+    set currentDate(newValue) {
+        this.__currentDate.set(newValue);
+    }
+    get currentTime() {
+        return this.__currentTime.get();
+    }
+    set currentTime(newValue) {
+        this.__currentTime.set(newValue);
+    }
+    aboutToAppear() {
+        this.updateDateTime();
+        this.updateStatusBarColor();
+    }
+    updateStatusBarColor() {
+        let appTheme = AppStorage.get('appTheme') || 'system';
+        let currentMode = ThemeHelper.getEffectiveColorMode();
+        let isDark = ThemeHelper.isEffectiveDarkMode(appTheme, currentMode);
+        let ctx = getContext(this);
+        ThemeHelper.setStatusBarColor(ctx, isDark ? '#FF1E293B' : '#FFFFFFFF');
+    }
+    updateDateTime() {
+        let now = new Date();
+        let year = now.getFullYear();
+        let month = ('0' + (now.getMonth() + 1)).slice(-2);
+        let day = ('0' + now.getDate()).slice(-2);
+        let hours = ('0' + now.getHours()).slice(-2);
+        let minutes = ('0' + now.getMinutes()).slice(-2);
+        this.currentDate = year + '-' + month + '-' + day;
+        this.currentTime = hours + ':' + minutes;
+    }
+    convertText() {
+        if (!this.inputText.trim()) {
+            return;
+        }
+        let result = '';
+        for (let i = 0; i < this.inputText.length; i++) {
+            let ch = this.inputText[i];
+            if (ch !== '*' && ch !== '#') {
+                result += ch;
+            }
+        }
+        this.outputText = result;
+    }
+    clearInput() {
+        this.inputText = '';
+        this.outputText = '';
+    }
+    copyOutput() {
+        if (!this.outputText.trim()) {
+            return;
+        }
+        try {
+            let data = pasteboard.createData(pasteboard.MIMETYPE_TEXT_PLAIN, this.outputText);
+            pasteboard.getSystemPasteboard().setData(data);
+            this.copyBtnText = 'å·²å¤åˆ¶';
+            setTimeout(() => {
+                this.copyBtnText = 'å¤åˆ¶';
+            }, 2000);
+        }
+        catch (e) {
+            console.error('copy error', JSON.stringify(e));
+        }
+    }
+    initialRender() {
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Column.create();
+            Column.width('100%');
+            Column.height('100%');
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Header
+            Row.create();
+            // Header
+            Row.width('100%');
+            // Header
+            Row.padding({ left: 16, right: 16, top: 12, bottom: 12 });
+            // Header
+            Row.backgroundColor({ "id": 16777245, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('AI ä¸€ç«™æ¸…');
+            Text.fontSize(16);
+            Text.fontWeight(FontWeight.Bold);
+            Text.fontColor({ "id": 16777255, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+        }, Text);
+        Text.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Column.create();
+            Column.width(1);
+            Column.height(16);
+            Column.backgroundColor({ "id": 16777247, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Column.margin({ left: 10, right: 10 });
+        }, Column);
+        Column.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('æ–‡æœ¬è½¬æ¢');
+            Text.fontSize(14);
+            Text.fontWeight(FontWeight.Regular);
+            Text.fontColor(ThemeHelper.getAccentColor());
+        }, Text);
+        Text.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Blank.create();
+        }, Blank);
+        Blank.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Column.create();
+            Column.alignItems(HorizontalAlign.End);
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create(this.currentDate);
+            Text.fontSize(10);
+            Text.fontColor({ "id": 16777256, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+        }, Text);
+        Text.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create(this.currentTime);
+            Text.fontSize(10);
+            Text.fontWeight(FontWeight.Bold);
+            Text.fontColor(ThemeHelper.getAccentColor());
+        }, Text);
+        Text.pop();
+        Column.pop();
+        // Header
+        Row.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Content
+            Column.create();
+            // Content
+            Column.layoutWeight(1);
+            // Content
+            Column.width('100%');
+            // Content
+            Column.backgroundColor({ "id": 16777246, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('Markdownè½¬çº¯æ–‡æœ¬');
+            Text.fontSize(19);
+            Text.fontWeight(FontWeight.Bold);
+            Text.fontColor({ "id": 16777255, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Text.textAlign(TextAlign.Center);
+            Text.width('100%');
+            Text.margin({ top: 35, bottom: 32 });
+        }, Text);
+        Text.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Input Area
+            Column.create();
+            // Input Area
+            Column.width('100%');
+            // Input Area
+            Column.padding({ left: 16, right: 16 });
+            // Input Area
+            Column.margin({ bottom: 14 });
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Row.create();
+            Row.width('100%');
+            Row.margin({ bottom: 8 });
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('è¾“å…¥æ¡†');
+            Text.fontSize(13);
+            Text.fontColor({ "id": 16777256, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+        }, Text);
+        Text.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Blank.create();
+        }, Blank);
+        Blank.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Button.createWithChild();
+            Button.height(32);
+            Button.backgroundColor(ThemeHelper.getAccentLightColor());
+            Button.borderRadius(16);
+            Button.padding({ left: 12, right: 12 });
+            Button.onClick(() => {
+                this.clearInput();
+            });
+        }, Button);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Row.create();
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            SymbolGlyph.create({ "id": 125831542, "type": 40000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            SymbolGlyph.fontSize(16);
+            SymbolGlyph.fontColor([ThemeHelper.getAccentColor()]);
+        }, SymbolGlyph);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('æ¸…ç©º');
+            Text.fontSize(13);
+            Text.fontColor(ThemeHelper.getAccentColor());
+            Text.margin({ left: 4 });
+        }, Text);
+        Text.pop();
+        Row.pop();
+        Button.pop();
+        Row.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            TextArea.create({ placeholder: 'ç¤ºä¾‹ï¼š# è¿™æ˜¯ä¸€ä¸ª**æ ‡é¢˜**', text: this.inputText });
+            TextArea.height(170);
+            TextArea.width('100%');
+            TextArea.fontSize(14);
+            TextArea.borderRadius(12);
+            TextArea.border({ width: 1, color: { "id": 16777247, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" } });
+            TextArea.padding(12);
+            TextArea.backgroundColor({ "id": 16777245, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            TextArea.onChange((value) => {
+                this.inputText = value;
+            });
+        }, TextArea);
+        // Input Area
+        Column.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Convert Button
+            Button.createWithChild();
+            // Convert Button
+            Button.width('80%');
+            // Convert Button
+            Button.height(48);
+            // Convert Button
+            Button.backgroundColor({ "id": 16777245, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            // Convert Button
+            Button.borderRadius(14);
+            // Convert Button
+            Button.shadow({ radius: 6, color: 'rgba(0, 0, 0, 0.08)', offsetY: 2 });
+            // Convert Button
+            Button.border({ width: 1, color: { "id": 16777247, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" } });
+            // Convert Button
+            Button.margin({ bottom: 14 });
+            // Convert Button
+            Button.alignSelf(ItemAlign.Center);
+            // Convert Button
+            Button.onClick(() => {
+                this.convertText();
+            });
+        }, Button);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Row.create();
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            SymbolGlyph.create({ "id": 125831553, "type": 40000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            SymbolGlyph.fontSize(18);
+            SymbolGlyph.fontColor([ThemeHelper.getAccentColor()]);
+        }, SymbolGlyph);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('è½¬æ¢');
+            Text.fontSize(15);
+            Text.fontWeight(FontWeight.Bold);
+            Text.fontColor(ThemeHelper.getAccentColor());
+            Text.margin({ left: 6 });
+        }, Text);
+        Text.pop();
+        Row.pop();
+        // Convert Button
+        Button.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Output Area
+            Column.create();
+            // Output Area
+            Column.width('100%');
+            // Output Area
+            Column.padding({ left: 16, right: 16 });
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Row.create();
+            Row.width('100%');
+            Row.margin({ bottom: 8 });
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('è¾“å‡ºæ¡†');
+            Text.fontSize(13);
+            Text.fontColor({ "id": 16777256, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+        }, Text);
+        Text.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Blank.create();
+        }, Blank);
+        Blank.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Button.createWithChild();
+            Button.height(32);
+            Button.backgroundColor(ThemeHelper.getAccentLightColor());
+            Button.borderRadius(16);
+            Button.padding({ left: 12, right: 12 });
+            Button.onClick(() => {
+                this.copyOutput();
+            });
+        }, Button);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Row.create();
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            SymbolGlyph.create({ "id": 125831925, "type": 40000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            SymbolGlyph.fontSize(16);
+            SymbolGlyph.fontColor([ThemeHelper.getAccentColor()]);
+        }, SymbolGlyph);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create(this.copyBtnText);
+            Text.fontSize(13);
+            Text.fontColor(ThemeHelper.getAccentColor());
+            Text.margin({ left: 4 });
+        }, Text);
+        Text.pop();
+        Row.pop();
+        Button.pop();
+        Row.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            TextArea.create({ placeholder: 'è½¬æ¢åçš„çº¯æ–‡æœ¬', text: this.outputText });
+            TextArea.height(170);
+            TextArea.width('100%');
+            TextArea.fontSize(14);
+            TextArea.borderRadius(12);
+            TextArea.border({ width: 1, color: { "id": 16777247, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" } });
+            TextArea.padding(12);
+            TextArea.backgroundColor({ "id": 16777245, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            TextArea.enabled(false);
+        }, TextArea);
+        // Output Area
+        Column.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Blank.create();
+            Blank.layoutWeight(1);
+        }, Blank);
+        Blank.pop();
+        // Content
+        Column.pop();
+        Column.pop();
+    }
+    rerender() {
+        this.updateDirtyElements();
+    }
+}
+export default ConvertPage;
+//# sourceMappingURL=ConvertPage.js.mapÂ’Ùj hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.pasteboard.d.tsÙrC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entry\src\main\ets\common\ThemeHelper.etsÙqC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entry\src\main\ets\pages\ConvertPage.etsÔrB›ªmoduleName±isLocalDependency¯isNodeEntryFile§pkgPath±belongProjectPath§pkgNameªpkgVersion±dependencyPkgInfo¯hostModulesInfo°belongModulePath¬shouldEmitJs¥entryÃÂÙNC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entryÙHC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts¥entry¥1.0.0Ô  ‘ÔrC’²hostDependencyName®hostModuleName­./ConvertPage¥entryÙNC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entryÃÃÚ±import { common, ConfigurationConstant } from '@kit.AbilityKit';
+import { pasteboard } from '@kit.BasicServicesKit';
+import { ThemeHelper } from '../common/ThemeHelper';
+
+@Component
+struct ConvertPage {
+  @State inputText: string = '';
+  @State outputText: string = '';
+  @State copyBtnText: string = 'å¤åˆ¶';
+  @State currentDate: string = '';
+  @State currentTime: string = '';
+
+  aboutToAppear(): void {
+    this.updateDateTime();
+    this.updateStatusBarColor();
+  }
+
+  private updateStatusBarColor(): void {
+    let appTheme: string = AppStorage.get<string>('appTheme') || 'system';
+    let currentMode: ConfigurationConstant.ColorMode = ThemeHelper.getEffectiveColorMode();
+    let isDark: boolean = ThemeHelper.isEffectiveDarkMode(appTheme, currentMode);
+    let ctx: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+    ThemeHelper.setStatusBarColor(ctx, isDark ? '#FF1E293B' : '#FFFFFFFF');
+  }
+
+  updateDateTime(): void {
+    let now: Date = new Date();
+    let year: number = now.getFullYear();
+    let month: string = ('0' + (now.getMonth() + 1)).slice(-2);
+    let day: string = ('0' + now.getDate()).slice(-2);
+    let hours: string = ('0' + now.getHours()).slice(-2);
+    let minutes: string = ('0' + now.getMinutes()).slice(-2);
+    this.currentDate = year + '-' + month + '-' + day;
+    this.currentTime = hours + ':' + minutes;
+  }
+
+  convertText(): void {
+    if (!this.inputText.trim()) {
+      return;
+    }
+    let result: string = '';
+    for (let i = 0; i < this.inputText.length; i++) {
+      let ch: string = this.inputText[i];
+      if (ch !== '*' && ch !== '#') {
+        result += ch;
+      }
+    }
+    this.outputText = result;
+  }
+
+  clearInput(): void {
+    this.inputText = '';
+    this.outputText = '';
+  }
+
+  copyOutput(): void {
+    if (!this.outputText.trim()) {
+      return;
+    }
+    try {
+      let data: pasteboard.PasteData = pasteboard.createData(pasteboard.MIMETYPE_TEXT_PLAIN, this.outputText);
+      pasteboard.getSystemPasteboard().setData(data);
+      this.copyBtnText = 'å·²å¤åˆ¶';
+      setTimeout(() => {
+        this.copyBtnText = 'å¤åˆ¶';
+      }, 2000);
+    } catch (e) {
+      console.error('copy error', JSON.stringify(e));
+    }
+  }
+
+  build() {
+    Column() {
+      // Header
+      Row() {
+        Text('AI ä¸€ç«™æ¸…')
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor($r('app.color.text_primary'))
+
+        Column()
+          .width(1)
+          .height(16)
+          .backgroundColor($r('app.color.border_color'))
+          .margin({ left: 10, right: 10 })
+
+        Text('æ–‡æœ¬è½¬æ¢')
+          .fontSize(14)
+          .fontWeight(FontWeight.Regular)
+          .fontColor(ThemeHelper.getAccentColor())
+
+        Blank()
+
+        Column() {
+          Text(this.currentDate)
+            .fontSize(10)
+            .fontColor($r('app.color.text_secondary'))
+          Text(this.currentTime)
+            .fontSize(10)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(ThemeHelper.getAccentColor())
+        }
+        .alignItems(HorizontalAlign.End)
+      }
+      .width('100%')
+      .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+      .backgroundColor($r('app.color.bg_card'))
+
+      // Content
+      Column() {
+        Text('Markdownè½¬çº¯æ–‡æœ¬')
+          .fontSize(19)
+          .fontWeight(FontWeight.Bold)
+          .fontColor($r('app.color.text_primary'))
+          .textAlign(TextAlign.Center)
+          .width('100%')
+          .margin({ top: 35, bottom: 32 })
+
+        // Input Area
+        Column() {
+          Row() {
+            Text('è¾“å…¥æ¡†')
+              .fontSize(13)
+              .fontColor($r('app.color.text_secondary'))
+            Blank()
+            Button() {
+              Row() {
+                SymbolGlyph($r('sys.symbol.trash'))
+                  .fontSize(16)
+                  .fontColor([ThemeHelper.getAccentColor()])
+                Text('æ¸…ç©º')
+                  .fontSize(13)
+                  .fontColor(ThemeHelper.getAccentColor())
+                  .margin({ left: 4 })
+              }
+            }
+            .height(32)
+            .backgroundColor(ThemeHelper.getAccentLightColor())
+            .borderRadius(16)
+            .padding({ left: 12, right: 12 })
+            .onClick(() => {
+              this.clearInput();
+            })
+          }
+          .width('100%')
+          .margin({ bottom: 8 })
+
+          TextArea({ placeholder: 'ç¤ºä¾‹ï¼š# è¿™æ˜¯ä¸€ä¸ª**æ ‡é¢˜**', text: this.inputText })
+            .height(170)
+            .width('100%')
+            .fontSize(14)
+            .borderRadius(12)
+            .border({ width: 1, color: $r('app.color.border_color') })
+            .padding(12)
+            .backgroundColor($r('app.color.bg_card'))
+            .onChange((value: string) => {
+              this.inputText = value;
+            })
+        }
+        .width('100%')
+        .padding({ left: 16, right: 16 })
+        .margin({ bottom: 14 })
+
+        // Convert Button
+        Button() {
+          Row() {
+            SymbolGlyph($r('sys.symbol.arrow_2_circlepath'))
+              .fontSize(18)
+              .fontColor([ThemeHelper.getAccentColor()])
+            Text('è½¬æ¢')
+              .fontSize(15)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(ThemeHelper.getAccentColor())
+              .margin({ left: 6 })
+          }
+        }
+        .width('80%')
+        .height(48)
+        .backgroundColor($r('app.color.bg_card'))
+        .borderRadius(14)
+        .shadow({ radius: 6, color: 'rgba(0, 0, 0, 0.08)', offsetY: 2 })
+        .border({ width: 1, color: $r('app.color.border_color') })
+        .margin({ bottom: 14 })
+        .alignSelf(ItemAlign.Center)
+        .onClick(() => {
+          this.convertText();
+        })
+
+        // Output Area
+        Column() {
+          Row() {
+            Text('è¾“å‡ºæ¡†')
+              .fontSize(13)
+              .fontColor($r('app.color.text_secondary'))
+            Blank()
+            Button() {
+              Row() {
+                SymbolGlyph($r('sys.symbol.text_clipboard'))
+                  .fontSize(16)
+                  .fontColor([ThemeHelper.getAccentColor()])
+                Text(this.copyBtnText)
+                  .fontSize(13)
+                  .fontColor(ThemeHelper.getAccentColor())
+                  .margin({ left: 4 })
+              }
+            }
+            .height(32)
+            .backgroundColor(ThemeHelper.getAccentLightColor())
+            .borderRadius(16)
+            .padding({ left: 12, right: 12 })
+            .onClick(() => {
+              this.copyOutput();
+            })
+          }
+          .width('100%')
+          .margin({ bottom: 8 })
+
+          TextArea({ placeholder: 'è½¬æ¢åçš„çº¯æ–‡æœ¬', text: this.outputText })
+            .height(170)
+            .width('100%')
+            .fontSize(14)
+            .borderRadius(12)
+            .border({ width: 1, color: $r('app.color.border_color') })
+            .padding(12)
+            .backgroundColor($r('app.color.bg_card'))
+            .enabled(false)
+        }
+        .width('100%')
+        .padding({ left: 16, right: 16 })
+
+        Blank()
+          .layoutWeight(1)
+      }
+      .layoutWeight(1)
+      .width('100%')
+      .backgroundColor($r('app.color.bg_primary'))
+    }
+    .width('100%')
+    .height('100%')
+  }
+}
+
+export default ConvertPage;
+ÀÔrD’°@ohos.pasteboardµ../common/ThemeHelperÔrE—ªassertions¨external¢id¤meta±moduleSideEffectsªresolvedByµsyntheticNamedExportsAÃÙj hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.pasteboard.d.tsÔrF‘¯hostModulesInfo‘C°@ohos.pasteboard¥entryÃªoh-resolveÂEAÂÙrC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entry\src\main\ets\common\ThemeHelper.etsAÃªoh-resolveÂ“ÔrG–§version¤fileªsourceRoot§sources¥names¨mappings®ConvertPage.js ‘¯ConvertPage.etsÜ™–”   ” 	” ” ”) 2”* 3˜”   ” ”	 	” ” ” ”3 3”4 4’” ” ‘”  ’”8 ”: ’”9 ”;  ’”: ”> #’”: 	”< 	!’”: 
+”< 
+!‘” 4’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 		” 	’” 		” 	’” 
+	” 
+’” 
+	” 
+’” ” –” ” ” 	” ” ” –” ” ” 	”! ”# ”$  ’” ” ’” 
+” ” ” ” ” ”! %”" &”% )”& 2”0 <”1 =”5 ÌA”= ÌI”> ÌJ™” ” ” ” 7”% ÌB”& ÌC”; ÌX”= ÌZ”> Ì[” ” ” ” ”  %”! &”4 9”5 :”= ÌB”? ÌD”ÌJ ÌO”ÌK ÌP”ÌL ÌQ™” ” ” ” '” 1” 2”! 6”" ÌR”# ÌSÜ ” ” ” ”% !”& "”) %”+ '”1 -”2 .”3 /”4 0”? ;”Ì@ <”ÌA =”ÌB >”ÌM ÌI”ÌN ÌJ”ÌO ÌK’” ” ’” ” ˜” ” ” ” ” ” ” ” ™” ” ” ” ” ” ”" &”$ (”% )Ü ” ” ” ” ” ” ” ”  ” #”  $”( ,”* .”- 1”. 2”/ 3”0 4”1 5”6 :”7 ;”8 <”9 =”: >”; ?Ü ” ” ” ” ” ” ” ”  ” !”$ (”& *”' +”( ,”- 1”. 2”/ 3”0 4”1 5”2 6Ü ” ” ” ” ” ” ” ” "” #”' +”) -”* .”+ /”0 4”1 5”2 6”3 7”4 8”5 9Ü ” ” ” ” ” ” ” !”  $”! %”+ /”- 1”. 2”/ 3”4 8”5 9”6 :”7 ;”8 <”9 =Ÿ”  ”  ”  	”  ”  ”  ”"  ”%  !”(  $”-  )”0  ,”3  /”6  2”9  5”:  6›” !” !” !	” !” !”  !”# !”& !"”) !%”0 !,”1 !-’” "” "’” $” $š” %” %” %	” %” %” %” %”  %”" %”$ % ’” &” &‘”	 '–” (” (” (” (” (” (Ü ” )” )	” )” )” )” )” )” )” )”  )”! )”* )&”+ )'”1 )-”3 )/”4 )0”6 )2”8 )4›” *” *
+” *” *” *” *”# *%”$ *&”% *'”& *(”' *)š” +” +
+” +” +” +” +”  +”% +”( +"”* +$•” ,” ,” ,” ,” ,‘” -‘”	 .—” /” /” /	” /” /”  /”! /’” 0” 0’” 2” 2—” 3” 3” 3	” 3” 3” 3” 3—” 4” 4” 4	” 4” 4” 4” 4’” 5” 5’” 7” 7š” 8” 8” 8	” 8” 8” 8” 8”! 8”# 8”% 8!’” 9” 9‘”	 :’” ;” ;Ü ” <” <
+” <” <'”! <1”" <2”, <<”- <=”7 <ÌG”8 <ÌH”ÌK <Ì[”ÌM <Ì]”ÌQ <Ìa”ÌR <Ìb”Ì\ <Ìl”Ì] <Ìm”Ì^ <Ìn›” =” =” =”* =$”, =&”- ='”4 =.”5 =/”9 =3”: =4”; =5—” >” >
+” >” >” >”$ >”% >•” ?” ?” ?” ?” ?—” Ì@” Ì@” Ì@”  Ì@”# Ì@”' Ì@”( Ì@ –” ÌA” ÌA” ÌA	” ÌA” ÌA” ÌA‘”	 ÌB”” ÌB” ÌB” ÌB” ÌBŸ” ÌC” ÌC” ÌC” ÌC” ÌC”& ÌC ”( ÌC"”, ÌC&”- ÌC'”6 ÌC0”7 ÌC1”8 ÌC2”9 ÌC3”: ÌC4”; ÌC5‘”	 ÌD’” ÌE” ÌE‘” ÌG’” ÌH” ÌH
+–” ÌH” ÌH
+” Ìí” Ìí
+” Ìí” Ìí–” ÌH” ÌH
+” Ìî” Ìî” Ìî”  Ìî’” ÌI” ÌI’” ÌJ” ÌJ	’” ÌI” ÌI–” ÌJ” ÌJ	” Ìh” Ìh” Ìh” Ìh’” ÌI” ÌIÜ ” ÌJ” ÌJ	” Ìi” Ìi” Ìi” Ìi” Ìi”  Ìi”" Ìi”$ Ìi”) Ìi ”+ Ìi"”- Ìi$”/ Ìi&”2 Ìi)”4 Ìi+”6 Ìi-”8 Ìi/”> Ìi5”Ì@ Ìi7”ÌB Ìi9”ÌD Ìi;’” ÌI” ÌI”” ÌJ” ÌJ	” Ìj” Ìj”” ÌK” ÌK” ÌK”  ÌK–” ÌK” ÌK” ÌL” ÌL” ÌL” ÌL˜” ÌK” ÌK” ÌM” ÌM” ÌM”& ÌM ”' ÌM!”+ ÌM%”” ÌK” ÌK” ÌN” ÌN’” ÌK” ÌK’” ÌP” ÌP–” ÌP” ÌP” ÌQ” ÌQ” ÌQ” ÌQ–” ÌP” ÌP” ÌR” ÌR” ÌR” ÌR”” ÌP” ÌP” ÌS”" ÌS” ÌP” ÌP” ÌT” ÌT” ÌT” ÌT”  ÌT”" ÌT”$ ÌT”& ÌT”+ ÌT#”- ÌT%”/ ÌT'”1 ÌT)’” ÌP” ÌP”” ÌV” ÌV” ÌV” ÌV–” ÌV” ÌV” ÌW” ÌW” ÌW” ÌW˜” ÌV” ÌV” ÌX” ÌX” ÌX”& ÌX ”' ÌX!”. ÌX(™” ÌV” ÌV” ÌY” ÌY” ÌY”& ÌY ”' ÌY!”5 ÌY/”7 ÌY1’” ÌV” ÌV’” Ì[” Ì[’” Ì[” Ì[’” Ì]” Ì]˜” Ì]” Ì]” Ìf	” Ìf” Ìf”- Ìf#”. Ìf$”1 Ìf'–” Ì^
+” Ì^” Ì^” Ì^” Ì^”( Ì^–” Ì^
+” Ì^” Ì_” Ì_” Ì_” Ì_”” Ì^
+” Ì^” Ì`” Ì`’” Ì^
+” Ì^–” Ìa
+” Ìa” Ìa” Ìa” Ìa”( Ìa–” Ìa
+” Ìa” Ìb” Ìb” Ìb” Ìb˜” Ìa
+” Ìa” Ìc” Ìc” Ìc”& Ìc"”' Ìc#”+ Ìc'™” Ìa
+” Ìa” Ìd” Ìd” Ìd”& Ìd"”' Ìd#”5 Ìd1”7 Ìd3’” Ìa
+” Ìa’” Ì]” Ì]’” ÌI” ÌI’” ÌJ” ÌJ	’” Ìl” Ìl’” Ìm” Ìm’” Ìl” Ìl–” Ìm” Ìm” Ìé” Ìé”  Ìé”! Ìé’” Ìl” Ìl–” Ìm” Ìm” Ìê” Ìê” Ìê” Ìê’” Ìl” Ìl”” Ìm” Ìm” Ìë”" Ìë”” Ìn” Ìn” Ìn”& Ìn–” Ìn” Ìn” Ìo” Ìo” Ìo” Ìo˜” Ìn” Ìn” Ìp” Ìp” Ìp”& Ìp ”' Ìp!”+ Ìp%”” Ìn” Ìn” Ìq” Ìq˜” Ìn” Ìn” Ìr” Ìr” Ìr”$ Ìr”% Ìr”+ Ìr%–” Ìn” Ìn” Ìs” Ìs” Ìs” Ìs” Ìn” Ìn” Ìt” Ìt” Ìt” Ìt” Ìt” Ìt”! Ìt”# Ìt”) Ìt#”+ Ìt%”- Ìt'”/ Ìt)’” Ìn” Ìn’” Ìv” Ìv’” Ìw” Ìw’” Ìv” Ìv–” Ìw” Ìw” ÌŸ	” ÌŸ” ÌŸ” ÌŸ’” Ìv” Ìv” Ìw” Ìw” Ì 	” Ì ” Ì ” Ì ”! Ì ”# Ì ”% Ì ”' Ì ”, Ì "”. Ì $”0 Ì &”2 Ì (’” Ìv” Ìvš” Ìw” Ìw” Ì¡	” Ì¡” Ì¡” Ì¡”" Ì¡”$ Ì¡”& Ì¡”( Ì¡’” Ìx
+” Ìx–” Ìx
+” Ìx” Ì” Ì” Ì” Ìš” Ìx
+” Ìx” Ì‘” Ì‘” Ì‘” Ì‘” Ì‘”! Ì‘”" Ì‘”$ Ì‘”” Ìy” Ìy” Ìy” Ìy–” Ìy” Ìy” Ìz” Ìz” Ìz” Ìz”” Ìy” Ìy” Ì{” Ì{’” Ìy” Ìy’” Ì|” Ì|’” Ì|” Ì|’” Ì}” Ì}–” Ì}” Ì}” Ìˆ” Ìˆ” Ìˆ” Ìˆ™” Ì}” Ì}” Ì‰”" Ì‰”# Ì‰”. Ì‰(”/ Ì‰)”ÌB Ì‰<”ÌD Ì‰>–” Ì}” Ì}” ÌŠ” ÌŠ”  ÌŠ”" ÌŠ” Ì}” Ì}” Ì‹” Ì‹” Ì‹” Ì‹”! Ì‹”# Ì‹”% Ì‹”' Ì‹!”, Ì‹&”. Ì‹(”0 Ì‹*”2 Ì‹,—” Ì}” Ì}” ÌŒ” ÌŒ” ÌŒ” ÌŒ”  ÌŒ–” Ì” Ì” Ì” Ì”! Ì”" Ì ’” Ì” Ì’” Ì~” Ì~’” Ì” Ì–” Ì” Ì” Ì€”  Ì€”! Ì€”# Ì€›” Ì” Ì” Ì”! Ì”" Ì”# Ì”. Ì)”/ Ì*”= Ì8”? Ì:”Ì@ Ì;”” Ì‚” Ì‚” Ì‚” Ì‚–” Ì‚” Ì‚” Ìƒ” Ìƒ” Ìƒ” Ìƒ™” Ì‚” Ì‚” Ì„” Ì„” Ì„”& Ì„(”' Ì„)”5 Ì„7”7 Ì„9š” Ì‚” Ì‚” Ì…” Ì…” Ì…” Ì…” Ì… ”  Ì…"”! Ì…#”# Ì…%’” Ì‚” Ì‚’” Ì~” Ì~’” Ì}” Ì}’” Ìx
+” Ìx” Ì“
+” Ì“” Ì“” Ì“”) Ì“ ”+ Ì“"”< Ì“3”> Ì“5”ÌB Ì“9”ÌD Ì“;”ÌH Ì“?”ÌI Ì“Ì@”ÌR Ì“ÌI”ÌT Ì“ÌK–” Ì“
+” Ì“” Ì”” Ì”” Ì”” Ì”–” Ì“
+” Ì“” Ì•” Ì•” Ì•”! Ì•–” Ì“
+” Ì“” Ì–” Ì–” Ì–”  Ì––” Ì“
+” Ì“” Ì—”! Ì—”" Ì—”$ Ì—” Ì“
+” Ì“” Ì˜” Ì˜” Ì˜” Ì˜”# Ì˜”% Ì˜”& Ì˜”( Ì˜ ”- Ì˜%”ÌŸ Ì˜ÌC”Ì¡ Ì˜ÌE–” Ì“
+” Ì“” Ì™” Ì™” Ì™” Ì™”” Ì“
+” Ì“” Ìš”$ Ìš™” Ì“
+” Ì“” Ì›” Ì›” Ì›” Ì›”$ Ì›$”& Ì›&”( Ì›(—” Ìœ” Ìœ” Ìœ” Ìœ”! Ìœ”& Ìœ$”' Ìœ%’” Ì” Ì’” Ìv” Ìv’” Ìw” Ìw’” Ì£” Ì£’” Ì¤” Ì¤’” Ì£” Ì£–” Ì¤” Ì¤” Ì°	” Ì°” Ì°” Ì°’” Ì£” Ì£–” Ì¤” Ì¤” Ì±	” Ì±” Ì±” Ì±’” Ì£” Ì£”” Ì¤” Ì¤” Ì²	”" Ì²’” Ì£” Ì£–” Ì¤” Ì¤” Ì³	” Ì³”  Ì³”" Ì³’” Ì£” Ì£Ü ” Ì¤” Ì¤” Ì´	” Ì´” Ì´” Ì´”" Ì´”$ Ì´”% Ì´”' Ì´”, Ì´"”. Ì´$”ÌC Ì´9”ÌE Ì´;”ÌL Ì´ÌB”ÌN Ì´ÌD”ÌO Ì´ÌE”ÌQ Ì´ÌG’” Ì£” Ì£” Ì¤” Ì¤” Ìµ	” Ìµ” Ìµ” Ìµ”! Ìµ”# Ìµ”$ Ìµ”& Ìµ”+ Ìµ!”Ì Ìµ?”ÌŸ ÌµÌA’” Ì£” Ì£š” Ì¤” Ì¤” Ì¶	” Ì¶” Ì¶” Ì¶”" Ì¶”$ Ì¶”& Ì¶”( Ì¶’” Ì£” Ì£˜” Ì¤” Ì¤” Ì·	” Ì·” Ì·”& Ì·”' Ì·”- Ì·#’” Ì£” Ì£—” Ì¤” Ì¤” Ì¸	” Ì¸” Ì¸” Ì¸”  Ì¸–” Ì¹
+” Ì¹” Ì¹”  Ì¹”" Ì¹”# Ì¹’” Ìº” Ìº	’” Ì¥
+” Ì¥’” Ì¦” Ì¦–” Ì¦” Ì¦” Ì§”  Ì§”! Ì§”# Ì§›” Ì¦” Ì¦” Ì¨”! Ì¨”" Ì¨”# Ì¨”. Ì¨%”/ Ì¨&”= Ì¨4”? Ì¨6”Ì@ Ì¨7”” Ì©” Ì©” Ì©” Ì©–” Ì©” Ì©” Ìª” Ìª” Ìª” Ìª˜” Ì©” Ì©” Ì«” Ì«” Ì«”& Ì«$”' Ì«%”+ Ì«)™” Ì©” Ì©” Ì¬” Ì¬” Ì¬”& Ì¬$”' Ì¬%”5 Ì¬3”7 Ì¬5š” Ì©” Ì©” Ì­” Ì­” Ì­” Ì­” Ì­”  Ì­”! Ì­”# Ì­!’” Ì©” Ì©’” Ì¥
+” Ì¥’” Ì£” Ì£’” Ì¤” Ì¤’” Ì¼” Ì¼’” Ì½” Ì½’” Ì¼” Ì¼–” Ì½” Ì½” Ìã	” Ìã” Ìã” Ìã’” Ì¼” Ì¼” Ì½” Ì½” Ìä	” Ìä” Ìä” Ìä”! Ìä”# Ìä”% Ìä”' Ìä”, Ìä"”. Ìä$”0 Ìä&”2 Ìä(’” Ì¾
+” Ì¾–” Ì¾
+” Ì¾” ÌÖ” ÌÖ” ÌÖ” ÌÖš” Ì¾
+” Ì¾” Ì×” Ì×” Ì×” Ì×” Ì×”! Ì×”" Ì×”$ Ì×”” Ì¿” Ì¿” Ì¿” Ì¿–” Ì¿” Ì¿” ÌÀ” ÌÀ” ÌÀ” ÌÀ”” Ì¿” Ì¿” ÌÁ” ÌÁ’” Ì¿” Ì¿’” ÌÂ” ÌÂ’” ÌÂ” ÌÂ’” ÌÃ” ÌÃ–” ÌÃ” ÌÃ” ÌÎ” ÌÎ” ÌÎ” ÌÎ™” ÌÃ” ÌÃ” ÌÏ”" ÌÏ”# ÌÏ”. ÌÏ(”/ ÌÏ)”ÌB ÌÏ<”ÌD ÌÏ>–” ÌÃ” ÌÃ” ÌĞ” ÌĞ”  ÌĞ”" ÌĞ” ÌÃ” ÌÃ” ÌÑ” ÌÑ” ÌÑ” ÌÑ”! ÌÑ”# ÌÑ”% ÌÑ”' ÌÑ!”, ÌÑ&”. ÌÑ(”0 ÌÑ*”2 ÌÑ,—” ÌÃ” ÌÃ” ÌÒ” ÌÒ” ÌÒ” ÌÒ”  ÌÒ–” ÌÓ” ÌÓ” ÌÓ” ÌÓ”! ÌÓ”" ÌÓ ’” ÌÔ” ÌÔ’” ÌÄ” ÌÄ’” ÌÅ” ÌÅ–” ÌÅ” ÌÅ” ÌÆ”  ÌÆ”! ÌÆ”# ÌÆ›” ÌÅ” ÌÅ” ÌÇ”! ÌÇ”" ÌÇ”# ÌÇ”. ÌÇ)”/ ÌÇ*”= ÌÇ8”? ÌÇ:”Ì@ ÌÇ;–” ÌÈ” ÌÈ” ÌÈ” ÌÈ” ÌÈ”( ÌÈ%–” ÌÈ” ÌÈ” ÌÉ” ÌÉ” ÌÉ” ÌÉ™” ÌÈ” ÌÈ” ÌÊ” ÌÊ” ÌÊ”& ÌÊ(”' ÌÊ)”5 ÌÊ7”7 ÌÊ9š” ÌÈ” ÌÈ” ÌË” ÌË” ÌË” ÌË” ÌË ”  ÌË"”! ÌË#”# ÌË%’” ÌÈ” ÌÈ’” ÌÄ” ÌÄ’” ÌÃ” ÌÃ’” Ì¾
+” Ì¾” ÌÙ
+” ÌÙ” ÌÙ” ÌÙ”) ÌÙ ”+ ÌÙ"”4 ÌÙ+”6 ÌÙ-”: ÌÙ1”< ÌÙ3”Ì@ ÌÙ7”ÌA ÌÙ8”ÌK ÌÙÌB”ÌM ÌÙÌD–” ÌÙ
+” ÌÙ” ÌÚ” ÌÚ” ÌÚ” ÌÚ–” ÌÙ
+” ÌÙ” ÌÛ” ÌÛ” ÌÛ”! ÌÛ–” ÌÙ
+” ÌÙ” ÌÜ” ÌÜ” ÌÜ”  ÌÜ–” ÌÙ
+” ÌÙ” Ìİ”! Ìİ”" Ìİ”$ Ìİ” ÌÙ
+” ÌÙ” ÌŞ” ÌŞ” ÌŞ” ÌŞ”# ÌŞ”% ÌŞ”& ÌŞ”( ÌŞ ”- ÌŞ%”ÌŸ ÌŞÌC”Ì¡ ÌŞÌE–” ÌÙ
+” ÌÙ” Ìß” Ìß” Ìß” Ìß”” ÌÙ
+” ÌÙ” Ìà”$ Ìà–” ÌÙ
+” ÌÙ” Ìá” Ìá” Ìá”" Ìá’” Ì¼” Ì¼’” Ì½” Ì½’” Ìæ” Ìæ–” Ìæ” Ìæ” Ìç” Ìç” Ìç”  Ìç’” Ìæ” Ìæ’” Ìl” Ìl’” Ìm” Ìm’” ÌH” ÌH
+‘” Ìï””  Ìò ” Ìò” Ìò” ÌòÔrH–§version¤file§sources®sourcesContent¥names¨mappingsÀ‘À‘ÀÜš‘”    ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”  	 ‘”  
+ ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”    ‘”  ! ‘”  " ‘”  # ‘”  $ ‘”  % ‘”  & ‘”  ' ‘”  ( ‘”  ) ‘”  * ‘”  + ‘”  , ‘”  - ‘”  . ‘”  / ‘”  0 ‘”  1 ‘”  2 ‘”  3 ‘”  4 ‘”  5 ‘”  6 ‘”  7 ‘”  8 ‘”  9 ‘”  : ‘”  ; ‘”  < ‘”  = ‘”  > ‘”  ? ‘”  Ì@ ‘”  ÌA ‘”  ÌB ‘”  ÌC ‘”  ÌD ‘”  ÌE ‘”  ÌF ‘”  ÌG ‘”  ÌH ‘”  ÌI ‘”  ÌJ ‘”  ÌK ‘”  ÌL ‘”  ÌM ‘”  ÌN ‘”  ÌO ‘”  ÌP ‘”  ÌQ ‘”  ÌR ‘”  ÌS ‘”  ÌT ‘”  ÌU ‘”  ÌV ‘”  ÌW ‘”  ÌX ‘”  ÌY ‘”  ÌZ ‘”  Ì[ ‘”  Ì\ ‘”  Ì] ‘”  Ì^ ‘”  Ì_ ‘”  Ì` ‘”  Ìa ‘”  Ìb ‘”  Ìc ‘”  Ìd ‘”  Ìe ‘”  Ìf ‘”  Ìg ‘”  Ìh ‘”  Ìi ‘”  Ìj ‘”  Ìk ‘”  Ìl ‘”  Ìm ‘”  Ìn ‘”  Ìo ‘”  Ìp ‘”  Ìq ‘”  Ìr ‘”  Ìs ‘”  Ìt ‘”  Ìu ‘”  Ìv ‘”  Ìw ‘”  Ìx ‘”  Ìy ‘”  Ìz ‘”  Ì{ ‘”  Ì| ‘”  Ì} ‘”  Ì~ ‘”  Ì ‘”  Ì€ ‘”  Ì ‘”  Ì‚ ‘”  Ìƒ ‘”  Ì„ ‘”  Ì… ‘”  Ì† ‘”  Ì‡ ‘”  Ìˆ ‘”  Ì‰ ‘”  ÌŠ ‘”  Ì‹ ‘”  ÌŒ ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì‘ ‘”  Ì’ ‘”  Ì“ ‘”  Ì” ‘”  Ì• ‘”  Ì– ‘”  Ì— ‘”  Ì˜ ‘”  Ì™ ‘”  Ìš ‘”  Ì› ‘”  Ìœ ‘”  Ì ‘”  Ì ‘”  ÌŸ ‘”  Ì  ‘”  Ì¡ ‘”  Ì¢ ‘”  Ì£ ‘”  Ì¤ ‘”  Ì¥ ‘”  Ì¦ ‘”  Ì§ ‘”  Ì¨ ‘”  Ì© ‘”  Ìª ‘”  Ì« ‘”  Ì¬ ‘”  Ì­ ‘”  Ì® ‘”  Ì¯ ‘”  Ì° ‘”  Ì± ‘”  Ì² ‘”  Ì³ ‘”  Ì´ ‘”  Ìµ ‘”  Ì¶ ‘”  Ì· ‘”  Ì¸ ‘”  Ì¹ ‘”  Ìº ‘”  Ì» ‘”  Ì¼ ‘”  Ì½ ‘”  Ì¾ ‘”  Ì¿ ‘”  ÌÀ ‘”  ÌÁ ‘”  ÌÂ ‘”  ÌÃ ‘”  ÌÄ ‘”  ÌÅ ‘”  ÌÆ ‘”  ÌÇ ‘”  ÌÈ ‘”  ÌÉ ‘”  ÌÊ ‘”  ÌË ‘”  ÌÌ ‘”  ÌÍ ‘”  ÌÎ ‘”  ÌÏ ‘”  ÌĞ ‘”  ÌÑ ‘”  ÌÒ ‘”  ÌÓ ‘”  ÌÔ ‘”  ÌÕ ‘”  ÌÖ ‘”  Ì× ‘”  ÌØ ‘”  ÌÙ ‘”  ÌÚ ‘”  ÌÛ ‘”  ÌÜ ‘”  Ìİ ‘”  ÌŞ ‘”  Ìß ‘”  Ìà ‘”  Ìá ‘”  Ìâ ‘”  Ìã ‘”  Ìä ‘”  Ìå ‘”  Ìæ ‘”  Ìç ‘”  Ìè ‘”  Ìé ‘”  Ìê ‘”  Ìë ‘”  Ìì ‘”  Ìí ‘”  Ìî ‘”  Ìï ‘”  Ìğ ‘”  Ìñ ‘”  Ìò ‘”  Ìó ‘”  Ìô ‘”  Ìõ ‘”  Ìö ‘”  Ì÷ ‘”  Ìø ‘”  Ìù ‘”  Ìú ‘”  Ìû ‘”  Ìü ‘”  Ìı ‘”  Ìş ‘”  Ìÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
+ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ‘”  Í) ‘”  Í* ‘”  Í+ ‘”  Í, ‘”  Í- ‘”  Í. ‘”  Í/ ‘”  Í0 ‘”  Í1 ‘”  Í2 ‘”  Í3 ‘”  Í4 ‘”  Í5 ‘”  Í6 ‘”  Í7 ‘”  Í8 ‘”  Í9 ‘”  Í: ‘”  Í; ‘”  Í< ‘”  Í= ‘”  Í> ‘”  Í? ‘”  Í@ ‘”  ÍA ‘”  ÍB ‘”  ÍC ‘”  ÍD ‘”  ÍE ‘”  ÍF ‘”  ÍG ‘”  ÍH ‘”  ÍI ‘”  ÍJ ‘”  ÍK ‘”  ÍL ‘”  ÍM ‘”  ÍN ‘”  ÍO ‘”  ÍP ‘”  ÍQ ‘”  ÍR ‘”  ÍS ‘”  ÍT ‘”  ÍU ‘”  ÍV ‘”  ÍW ‘”  ÍX ‘”  ÍY ‘”  ÍZ ‘”  Í[ ‘”  Í\ ‘”  Í] ‘”  Í^ ‘”  Í_ ‘”  Í` ‘”  Ía ‘”  Íb ‘”  Íc ‘”  Íd ‘”  Íe ‘”  Íf ‘”  Íg ‘”  Íh ‘”  Íi ‘”  Íj ‘”  Ík ‘”  Íl ‘”  Ím ‘”  Ín ‘”  Ío ‘”  Íp ‘”  Íq ‘”  Ír ‘”  Ís ‘”  Ít ‘”  Íu ‘”  Ív ‘”  Íw ‘”  Íx ‘”  Íy ‘”  Íz ‘”  Í{ ‘”  Í| ‘”  Í} ‘”  Í~ ‘”  Í ‘”  Í€ ‘”  Í ‘”  Í‚ ‘”  Íƒ ‘”  Í„ ‘”  Í… ‘”  Í† ‘”  Í‡ ‘”  Íˆ ‘”  Í‰ ‘”  ÍŠ ‘”  Í‹ ‘”  ÍŒ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í‘ ‘”  Í’ ‘”  Í“ ‘”  Í” ‘”  Í• ‘”  Í– ‘”  Í— ‘”  Í˜ ‘”  Í™ ÔrI’§missing¦pluginÃ¦genAbcÂÔ  ÔrJ”²dynamicImportCache¹exportAllDeclarationCache»exportNamedDeclarationCache«importCache’ÔrK•¤type¥start£endªspecifiers¦source±ImportDeclarationÌ€Ìª‘ÔrL”¤type¥start£end¥local¶ImportDefaultSpecifierÌ‡Ì‘ÔrM”¤type¥start£end¤nameªIdentifierÌ‡Ì‘ªpasteboardÔrN•¤type¥start£end¥value£raw§LiteralÌ—Ì©°@ohos.pasteboard²"@ohos.pasteboard"K±ImportDeclarationÌ¬Ìà‘ÔrO•¤type¥start£end¨imported¥local¯ImportSpecifierÌµÌÀMªIdentifierÌµÌÀ«ThemeHelperMªIdentifierÌµÌÀ«ThemeHelperN§LiteralÌÈÌßµ../common/ThemeHelper·'../common/ThemeHelper'

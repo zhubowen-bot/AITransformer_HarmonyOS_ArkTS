@@ -1,0 +1,662 @@
+Ôr@Ÿªassertions¤code´customTransformCache¬dependencies¢id¤meta±moduleSideEffects¬originalCode±originalSourcemap«resolvedIds®sourcemapChainµsyntheticNamedExportsµtransformDependencies®transformFiles¨cacheAstÔrAÚA×if (!("finalizeConstruction" in ViewPU.prototype)) {
+    Reflect.set(ViewPU.prototype, "finalizeConstruction", () => { });
+}
+import router from "@ohos.router";
+import ConfigurationConstant from "@ohos.app.ability.ConfigurationConstant";
+import { ThemeHelper } from '../common/ThemeHelper';
+class SupportPage extends ViewPU {
+    constructor(parent, params, __localStorage, elmtId = -1, paramsLambda = undefined, extraInfo) {
+        super(parent, __localStorage, elmtId, extraInfo);
+        if (typeof paramsLambda === "function") {
+            this.paramsGenerator_ = paramsLambda;
+        }
+        this.__appTheme = this.createStorageLink('appTheme', 'system', "appTheme");
+        this.__currentColorMode = this.createStorageProp('currentColorMode', ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT, "currentColorMode");
+        this.setInitiallyProvidedValue(params);
+        this.finalizeConstruction();
+    }
+    setInitiallyProvidedValue(params) {
+    }
+    updateStateVars(params) {
+    }
+    purgeVariableDependenciesOnElmtId(rmElmtId) {
+        this.__appTheme.purgeDependencyOnElmtId(rmElmtId);
+        this.__currentColorMode.purgeDependencyOnElmtId(rmElmtId);
+    }
+    aboutToBeDeleted() {
+        this.__appTheme.aboutToBeDeleted();
+        this.__currentColorMode.aboutToBeDeleted();
+        SubscriberManager.Get().delete(this.id__());
+        this.aboutToBeDeletedInternal();
+    }
+    get appTheme() {
+        return this.__appTheme.get();
+    }
+    set appTheme(newValue) {
+        this.__appTheme.set(newValue);
+    }
+    get currentColorMode() {
+        return this.__currentColorMode.get();
+    }
+    set currentColorMode(newValue) {
+        this.__currentColorMode.set(newValue);
+    }
+    getAccentColor() {
+        let colorTheme = AppStorage.get('appColorTheme') || 'blue';
+        let colorMap = {
+            'blue': '#3B82F6',
+            'green': '#059669',
+            'orange': '#EA580C',
+            'purple': '#7C3AED',
+            'cyan': '#0891B2',
+            'rose': '#E11D48'
+        };
+        return colorMap[colorTheme] || '#3B82F6';
+    }
+    isDarkMode() {
+        return ThemeHelper.isEffectiveDarkMode(this.appTheme, this.currentColorMode);
+    }
+    closePage() {
+        router.back();
+    }
+    openAppGalleryReview() {
+        let context = this.getUIContext().getHostContext();
+        let bundleName = 'com.aitransformer.bowenapp';
+        let want = {
+            action: 'ohos.want.action.appdetail',
+            uri: 'store://appgallery.huawei.com/app/detail?id=' + bundleName + '&action=write-review'
+        };
+        context.startAbility(want).then(() => {
+            console.info('SupportPage', 'openAppGalleryReview success');
+        }).catch((error) => {
+            console.error('SupportPage', 'openAppGalleryReview failed, Code: ' + error.code + ', message: ' + error.message);
+        });
+    }
+    initialRender() {
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Column.create();
+            Column.width('100%');
+            Column.height('100%');
+            Column.backgroundColor({ "id": 16777246, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Column.expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM]);
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // ===== Header =====
+            Row.create();
+            // ===== Header =====
+            Row.width('100%');
+            // ===== Header =====
+            Row.height(48);
+            // ===== Header =====
+            Row.padding({ left: 12, right: 12 });
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Button.createWithChild();
+            Button.width(36);
+            Button.height(36);
+            Button.backgroundColor(Color.Transparent);
+            Button.borderRadius(18);
+            Button.onClick(() => {
+                this.closePage();
+            });
+        }, Button);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            SymbolGlyph.create({ "id": 125832679, "type": 40000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            SymbolGlyph.fontSize(20);
+            SymbolGlyph.fontColor([{ "id": 16777255, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" }]);
+        }, SymbolGlyph);
+        Button.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Blank.create();
+        }, Blank);
+        Blank.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('æ”¯æŒä½œè€…');
+            Text.fontSize(18);
+            Text.fontWeight(FontWeight.Bold);
+            Text.fontColor({ "id": 16777255, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Text.margin({ left: -36 });
+        }, Text);
+        Text.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Blank.create();
+        }, Blank);
+        Blank.pop();
+        // ===== Header =====
+        Row.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Scroll.create();
+            Scroll.layoutWeight(1);
+            Scroll.width('100%');
+            Scroll.clip(false);
+            Scroll.edgeEffect(EdgeEffect.Spring);
+            Scroll.scrollBar(BarState.Off);
+        }, Scroll);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Column.create();
+            Column.width('100%');
+            Column.padding({ left: 16, right: 16, top: 20 });
+            Column.expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM]);
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // ===== Card 1: èµåŠ©ä½œè€… =====
+            Column.create();
+            // ===== Card 1: èµåŠ©ä½œè€… =====
+            Column.width('100%');
+            // ===== Card 1: èµåŠ©ä½œè€… =====
+            Column.padding(20);
+            // ===== Card 1: èµåŠ©ä½œè€… =====
+            Column.backgroundColor({ "id": 16777245, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            // ===== Card 1: èµåŠ©ä½œè€… =====
+            Column.borderRadius(16);
+            // ===== Card 1: èµåŠ©ä½œè€… =====
+            Column.margin({ bottom: 12 });
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Title
+            Row.create();
+            // Title
+            Row.width('100%');
+            // Title
+            Row.margin({ bottom: 12 });
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            SymbolGlyph.create({ "id": 125831544, "type": 40000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            SymbolGlyph.fontSize(22);
+            SymbolGlyph.fontColor([Color.Red]);
+        }, SymbolGlyph);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('èµåŠ©ä½œè€…');
+            Text.fontSize(18);
+            Text.fontWeight(FontWeight.Bold);
+            Text.fontColor({ "id": 16777255, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Text.margin({ left: 8 });
+        }, Text);
+        Text.pop();
+        // Title
+        Row.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Message
+            Text.create('åº”ç”¨å…¨é‡åŠŸèƒ½æ°¸ä¹…å…è´¹ã€‚å¦‚æœè¿™ä¸ªåº”ç”¨å¯¹ä½ æœ‰æ‰€å¸®åŠ©ï¼Œæ¬¢è¿èµåŠ©ä½œè€…ä¸€äº›å¼€å‘æ¶ˆè€—çš„ tokens ï¼(*^â–½^*)');
+            // Message
+            Text.fontSize(14);
+            // Message
+            Text.fontColor({ "id": 16777256, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            // Message
+            Text.lineHeight(22);
+            // Message
+            Text.width('100%');
+            // Message
+            Text.margin({ bottom: 4 });
+        }, Text);
+        // Message
+        Text.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('ä½ çš„æ¯ä¸€ä»½æ”¯æŒï¼Œéƒ½æ˜¯ä½œè€…æŒç»­å‰è¿›çš„åŠ¨åŠ›ï¼');
+            Text.fontSize(14);
+            Text.fontColor({ "id": 16777256, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Text.lineHeight(22);
+            Text.width('100%');
+            Text.margin({ bottom: 20 });
+        }, Text);
+        Text.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // QR Codes
+            Row.create();
+            // QR Codes
+            Row.width('100%');
+            // QR Codes
+            Row.justifyContent(FlexAlign.SpaceAround);
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // WeChat
+            Column.create();
+            // WeChat
+            Column.layoutWeight(1);
+            // WeChat
+            Column.alignItems(HorizontalAlign.Center);
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Image.create({ "id": 16777268, "type": 20000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Image.width(140);
+            Image.height(140);
+            Image.borderRadius(12);
+            Image.objectFit(ImageFit.Contain);
+            Image.border({ width: 1, color: { "id": 16777247, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" } });
+        }, Image);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('å¾®ä¿¡');
+            Text.fontSize(14);
+            Text.fontWeight(FontWeight.Medium);
+            Text.fontColor({ "id": 16777255, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Text.margin({ top: 8 });
+        }, Text);
+        Text.pop();
+        // WeChat
+        Column.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Alipay
+            Column.create();
+            // Alipay
+            Column.layoutWeight(1);
+            // Alipay
+            Column.alignItems(HorizontalAlign.Center);
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Image.create({ "id": 16777260, "type": 20000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Image.width(140);
+            Image.height(140);
+            Image.borderRadius(12);
+            Image.objectFit(ImageFit.Contain);
+            Image.border({ width: 1, color: { "id": 16777247, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" } });
+        }, Image);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('æ”¯ä»˜å®');
+            Text.fontSize(14);
+            Text.fontWeight(FontWeight.Medium);
+            Text.fontColor({ "id": 16777255, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Text.margin({ top: 8 });
+        }, Text);
+        Text.pop();
+        // Alipay
+        Column.pop();
+        // QR Codes
+        Row.pop();
+        // ===== Card 1: èµåŠ©ä½œè€… =====
+        Column.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // ===== Card 2: ç»™ä¸ªå¥½è¯„ =====
+            Column.create();
+            // ===== Card 2: ç»™ä¸ªå¥½è¯„ =====
+            Column.width('100%');
+            // ===== Card 2: ç»™ä¸ªå¥½è¯„ =====
+            Column.padding(20);
+            // ===== Card 2: ç»™ä¸ªå¥½è¯„ =====
+            Column.backgroundColor({ "id": 16777245, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            // ===== Card 2: ç»™ä¸ªå¥½è¯„ =====
+            Column.borderRadius(16);
+            // ===== Card 2: ç»™ä¸ªå¥½è¯„ =====
+            Column.margin({ bottom: 32 });
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Title
+            Row.create();
+            // Title
+            Row.width('100%');
+            // Title
+            Row.margin({ bottom: 12 });
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            SymbolGlyph.create({ "id": 125831520, "type": 40000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            SymbolGlyph.fontSize(22);
+            SymbolGlyph.fontColor([this.getAccentColor()]);
+        }, SymbolGlyph);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('ç»™ä¸ªå¥½è¯„');
+            Text.fontSize(18);
+            Text.fontWeight(FontWeight.Bold);
+            Text.fontColor({ "id": 16777255, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Text.margin({ left: 8 });
+        }, Text);
+        Text.pop();
+        // Title
+        Row.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('å¦‚æœä½ å–œæ¬¢è¿™ä¸ªåº”ç”¨ï¼Œæ¬¢è¿åœ¨åº”ç”¨å¸‚åœºç»™ä¸ªäº”æ˜Ÿå¥½è¯„ï¼');
+            Text.fontSize(14);
+            Text.fontColor({ "id": 16777256, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Text.lineHeight(22);
+            Text.width('100%');
+            Text.margin({ bottom: 8 });
+        }, Text);
+        Text.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('ä½ çš„å¥½è¯„æ˜¯å¯¹æˆ‘æœ€å¤§çš„é¼“åŠ±ï¼Œä¹Ÿæ˜¯æˆ‘æŒç»­ä¼˜åŒ–çš„åŠ¨åŠ›æºæ³‰ã€‚');
+            Text.fontSize(14);
+            Text.fontColor({ "id": 16777256, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Text.lineHeight(22);
+            Text.width('100%');
+            Text.margin({ bottom: 20 });
+        }, Text);
+        Text.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Row.create();
+            Row.width('100%');
+            Row.height(48);
+            Row.justifyContent(FlexAlign.Center);
+            Row.backgroundColor({ "id": 16777245, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Row.borderRadius(12);
+            Row.border({ width: 1, color: this.getAccentColor() });
+            Row.shadow({ radius: 8, color: this.getAccentColor() + '33', offsetY: 3 });
+            Row.onClick(() => {
+                this.openAppGalleryReview();
+            });
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Row.create();
+            Row.alignItems(VerticalAlign.Center);
+            Row.justifyContent(FlexAlign.Center);
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            SymbolGlyph.create({ "id": 125831520, "type": 40000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            SymbolGlyph.fontSize(18);
+            SymbolGlyph.fontColor([this.getAccentColor()]);
+        }, SymbolGlyph);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create('å»åº”ç”¨å¸‚åœºå¥½è¯„');
+            Text.fontSize(16);
+            Text.fontWeight(FontWeight.Medium);
+            Text.fontColor(this.getAccentColor());
+            Text.margin({ left: 6 });
+        }, Text);
+        Text.pop();
+        Row.pop();
+        Row.pop();
+        // ===== Card 2: ç»™ä¸ªå¥½è¯„ =====
+        Column.pop();
+        Column.pop();
+        Scroll.pop();
+        Column.pop();
+    }
+    rerender() {
+        this.updateDirtyElements();
+    }
+    static getEntryName() {
+        return "SupportPage";
+    }
+}
+export default SupportPage;
+registerNamedRoute(() => new SupportPage(undefined, {}), "", { bundleName: "com.aitransformer.bowenapp", moduleName: "entry", pagePath: "pages/SupportPage", pageFullPath: "entry/src/main/ets/pages/SupportPage", integratedHsp: "false", moduleType: "followWithHap" });
+//# sourceMappingURL=SupportPage.js.mapÂ“Ùf hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.router.d.tsÙ hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.app.ability.ConfigurationConstant.d.tsÙrC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entry\src\main\ets\common\ThemeHelper.etsÙqC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entry\src\main\ets\pages\SupportPage.etsÔrBšªmoduleName±isLocalDependency¯isNodeEntryFile§pkgPath±belongProjectPath§pkgNameªpkgVersion±dependencyPkgInfo°belongModulePath¬shouldEmitJs¥entryÃÂÙNC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entryÙHC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts¥entry¥1.0.0Ô  ÙNC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entryÃÃÚLimport { router } from '@kit.ArkUI';
+import { common, ConfigurationConstant, Want } from '@kit.AbilityKit';
+import { BusinessError } from '@kit.BasicServicesKit';
+import { ThemeHelper } from '../common/ThemeHelper';
+
+@Entry
+@Component
+struct SupportPage {
+  @StorageLink('appTheme') appTheme: string = 'system';
+  @StorageProp('currentColorMode') currentColorMode: ConfigurationConstant.ColorMode =
+    ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+
+  getAccentColor(): string {
+    let colorTheme: string = AppStorage.get<string>('appColorTheme') as string || 'blue';
+    let colorMap: Record<string, string> = {
+      'blue': '#3B82F6',
+      'green': '#059669',
+      'orange': '#EA580C',
+      'purple': '#7C3AED',
+      'cyan': '#0891B2',
+      'rose': '#E11D48'
+    };
+    return colorMap[colorTheme] || '#3B82F6';
+  }
+
+  isDarkMode(): boolean {
+    return ThemeHelper.isEffectiveDarkMode(this.appTheme, this.currentColorMode);
+  }
+
+  closePage(): void {
+    router.back();
+  }
+
+  openAppGalleryReview(): void {
+    let context: common.UIAbilityContext = this.getUIContext().getHostContext() as common.UIAbilityContext;
+    let bundleName: string = 'com.aitransformer.bowenapp';
+    let want: Want = {
+      action: 'ohos.want.action.appdetail',
+      uri: 'store://appgallery.huawei.com/app/detail?id=' + bundleName + '&action=write-review'
+    };
+    context.startAbility(want).then(() => {
+      console.info('SupportPage', 'openAppGalleryReview success');
+    }).catch((error: BusinessError) => {
+      console.error('SupportPage', 'openAppGalleryReview failed, Code: ' + error.code + ', message: ' + error.message);
+    });
+  }
+
+  build() {
+    Column() {
+      // ===== Header =====
+      Row() {
+        Button() {
+          SymbolGlyph($r('sys.symbol.arrow_left'))
+            .fontSize(20)
+            .fontColor([$r('app.color.text_primary')])
+        }
+        .width(36)
+        .height(36)
+        .backgroundColor(Color.Transparent)
+        .borderRadius(18)
+        .onClick(() => {
+          this.closePage();
+        })
+
+        Blank()
+
+        Text('æ”¯æŒä½œè€…')
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
+          .fontColor($r('app.color.text_primary'))
+          .margin({ left: -36 })
+
+        Blank()
+      }
+      .width('100%')
+      .height(48)
+      .padding({ left: 12, right: 12 })
+
+      Scroll() {
+        Column() {
+          // ===== Card 1: èµåŠ©ä½œè€… =====
+          Column() {
+            // Title
+            Row() {
+              SymbolGlyph($r('sys.symbol.heart'))
+                .fontSize(22)
+                .fontColor([Color.Red])
+
+              Text('èµåŠ©ä½œè€…')
+                .fontSize(18)
+                .fontWeight(FontWeight.Bold)
+                .fontColor($r('app.color.text_primary'))
+                .margin({ left: 8 })
+            }
+            .width('100%')
+            .margin({ bottom: 12 })
+
+            // Message
+            Text('åº”ç”¨å…¨é‡åŠŸèƒ½æ°¸ä¹…å…è´¹ã€‚å¦‚æœè¿™ä¸ªåº”ç”¨å¯¹ä½ æœ‰æ‰€å¸®åŠ©ï¼Œæ¬¢è¿èµåŠ©ä½œè€…ä¸€äº›å¼€å‘æ¶ˆè€—çš„ tokens ï¼(*^â–½^*)')
+              .fontSize(14)
+              .fontColor($r('app.color.text_secondary'))
+              .lineHeight(22)
+              .width('100%')
+              .margin({ bottom: 4 })
+
+            Text('ä½ çš„æ¯ä¸€ä»½æ”¯æŒï¼Œéƒ½æ˜¯ä½œè€…æŒç»­å‰è¿›çš„åŠ¨åŠ›ï¼')
+              .fontSize(14)
+              .fontColor($r('app.color.text_secondary'))
+              .lineHeight(22)
+              .width('100%')
+              .margin({ bottom: 20 })
+
+            // QR Codes
+            Row() {
+              // WeChat
+              Column() {
+                Image($r('app.media.wechat'))
+                  .width(140)
+                  .height(140)
+                  .borderRadius(12)
+                  .objectFit(ImageFit.Contain)
+                  .border({ width: 1, color: $r('app.color.border_color') })
+
+                Text('å¾®ä¿¡')
+                  .fontSize(14)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor($r('app.color.text_primary'))
+                  .margin({ top: 8 })
+              }
+              .layoutWeight(1)
+              .alignItems(HorizontalAlign.Center)
+
+              // Alipay
+              Column() {
+                Image($r('app.media.alipay'))
+                  .width(140)
+                  .height(140)
+                  .borderRadius(12)
+                  .objectFit(ImageFit.Contain)
+                  .border({ width: 1, color: $r('app.color.border_color') })
+
+                Text('æ”¯ä»˜å®')
+                  .fontSize(14)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor($r('app.color.text_primary'))
+                  .margin({ top: 8 })
+              }
+              .layoutWeight(1)
+              .alignItems(HorizontalAlign.Center)
+            }
+            .width('100%')
+            .justifyContent(FlexAlign.SpaceAround)
+          }
+          .width('100%')
+          .padding(20)
+          .backgroundColor($r('app.color.bg_card'))
+          .borderRadius(16)
+          .margin({ bottom: 12 })
+
+          // ===== Card 2: ç»™ä¸ªå¥½è¯„ =====
+          Column() {
+            // Title
+            Row() {
+              SymbolGlyph($r('sys.symbol.star'))
+                .fontSize(22)
+                .fontColor([this.getAccentColor()])
+
+              Text('ç»™ä¸ªå¥½è¯„')
+                .fontSize(18)
+                .fontWeight(FontWeight.Bold)
+                .fontColor($r('app.color.text_primary'))
+                .margin({ left: 8 })
+            }
+            .width('100%')
+            .margin({ bottom: 12 })
+
+            Text('å¦‚æœä½ å–œæ¬¢è¿™ä¸ªåº”ç”¨ï¼Œæ¬¢è¿åœ¨åº”ç”¨å¸‚åœºç»™ä¸ªäº”æ˜Ÿå¥½è¯„ï¼')
+              .fontSize(14)
+              .fontColor($r('app.color.text_secondary'))
+              .lineHeight(22)
+              .width('100%')
+              .margin({ bottom: 8 })
+
+            Text('ä½ çš„å¥½è¯„æ˜¯å¯¹æˆ‘æœ€å¤§çš„é¼“åŠ±ï¼Œä¹Ÿæ˜¯æˆ‘æŒç»­ä¼˜åŒ–çš„åŠ¨åŠ›æºæ³‰ã€‚')
+              .fontSize(14)
+              .fontColor($r('app.color.text_secondary'))
+              .lineHeight(22)
+              .width('100%')
+              .margin({ bottom: 20 })
+
+            Row() {
+              Row() {
+                SymbolGlyph($r('sys.symbol.star'))
+                  .fontSize(18)
+                  .fontColor([this.getAccentColor()])
+
+                Text('å»åº”ç”¨å¸‚åœºå¥½è¯„')
+                  .fontSize(16)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor(this.getAccentColor())
+                  .margin({ left: 6 })
+              }
+              .alignItems(VerticalAlign.Center)
+              .justifyContent(FlexAlign.Center)
+            }
+            .width('100%')
+            .height(48)
+            .justifyContent(FlexAlign.Center)
+            .backgroundColor($r('app.color.bg_card'))
+            .borderRadius(12)
+            .border({ width: 1, color: this.getAccentColor() })
+            .shadow({ radius: 8, color: this.getAccentColor() + '33', offsetY: 3 })
+            .onClick(() => {
+              this.openAppGalleryReview();
+            })
+          }
+          .width('100%')
+          .padding(20)
+          .backgroundColor($r('app.color.bg_card'))
+          .borderRadius(16)
+          .margin({ bottom: 32 })
+        }
+        .width('100%')
+        .padding({ left: 16, right: 16, top: 20 })
+        .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+      }
+      .layoutWeight(1)
+      .width('100%')
+      .clip(false)
+      .edgeEffect(EdgeEffect.Spring)
+      .scrollBar(BarState.Off)
+    }
+    .width('100%')
+    .height('100%')
+    .backgroundColor($r('app.color.bg_primary'))
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.BOTTOM])
+  }
+}
+
+export default SupportPage;
+ÀÔrC“¬@ohos.routerÙ'@ohos.app.ability.ConfigurationConstantµ../common/ThemeHelperÔrD—ªassertions¨external¢id¤meta±moduleSideEffectsªresolvedByµsyntheticNamedExportsAÃÙf hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.router.d.tsAÃªoh-resolveÂDAÃÙ hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.app.ability.ConfigurationConstant.d.tsAÃªoh-resolveÂDAÂÙrC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entry\src\main\ets\common\ThemeHelper.etsAÃªoh-resolveÂ“ÔrE–§version¤fileªsourceRoot§sources¥names¨mappings®SupportPage.js ‘¯SupportPage.etsÜp–”    ”  	”  ”  ”!  #”"  $–”   ” ” &”" 4”ÌK ÌE”ÌL ÌF˜”   ” ”	 	” ” ” ”3 3”4 4’” ” ‘”  ””1 ”; ”= .”ÌE 6˜”9 	”ÌK 	!”ÌM 
+”Ìb 
+”Ìc 
+”Ìl 
+#”Ìm 
+$”Ì} 
+4‘” 4’” ” #’” ” #’” 	#” 	3’” 	#” 	3’” ” ” ” ” ” ”# '”$ (”' +”( 4”7 ÌC”8 ÌN”< ÌR”ÌB ÌX”ÌC ÌY”” ” ” ” +”” ” ” ” ”” ” ” ” ”” ” ” ” ”” ” ” ” ”” ” ” ” ”” ” ” ” ’”	 ”
+ ™” ” ” ” ”" ”# ”' #”0 ,”1 -’” ” ’” ” Ÿ” ” ” ” ”. *”/ +”3 /”4 0”< 8”> :”ÌB >”ÌC ?”ÌS ÌO”ÌT ÌP”ÌU ÌQ’” ” ’” ” –” ” 
+” ” ” ” ’” ” ’” !” !œ” "” "” "” "+” "/” "0”' "<”) ">”* "?”8 "ÌM”: "Ìj”; "Ìk–” #” #” #” #”5 #9”6 #:”” $” $” $” $”” %” %” %”0 %*˜” &” &	” &”? &9”ÌB &<”ÌL &ÌF”ÌO &ÌI”Ìe &Ì_’”	 '”
+ 'œ” (” (” (” (” (”! (”" (”# (”' (#”( ($”+ ('”- ()š” )” )” )” )” )”& ) ”( )"”ÌF )Ì@”ÌG )ÌA”ÌH )ÌBš” *”	 *”
+ *” *” *” *” *” *"” *$” *&Ü ” +” +” +” +” +”' +!”) +#”ÌN +ÌH”ÌQ +ÌK”ÌV +ÌP”ÌW +ÌQ”Ì[ +ÌU”Ì^ +ÌX”Ìk +Ìe”Ìn +Ìh”Ìs +Ìm”Ìt +Ìn”Ì{ +Ìu”Ì| +Ìv”Ì} +Ìw”” ,”	 ,”
+ ,” ,’” -” -‘” /’” 0” 0
+–” 0” 0
+” Ìè” Ìè
+” Ìè” Ìè–” 0” 0
+” Ìé” Ìé” Ìé”  Ìé”” 0” 0
+” Ìê”" ÌêÜ ” 0” 0
+” Ìë”! Ìë”" Ìë”# Ìë”/ Ìë!”0 Ìë"”6 Ìë(”7 Ìë)”9 Ìë+”: Ìë,”ÌF Ìë8”ÌG Ìë9”ÌM Ìë?”ÌN ÌëÌ@’” 1”! 1’” 2” 2	’” 1”! 1–” 2” 2	” ÌJ” ÌJ” ÌJ” ÌJ’” 1”! 1–” 2” 2	” ÌK” ÌK” ÌK” ÌK’” 1”! 1” 2” 2	” ÌL” ÌL” ÌL” ÌL” ÌL”  ÌL”" ÌL”$ ÌL”) ÌL ”+ ÌL"”- ÌL$”/ ÌL&’” 3” 3–” 3” 3” 8	” 8” 8” 8–” 3” 3” 9	” 9” 9” 9˜” 3” 3” :	”" :”# :”( :”) :”4 :*–” 3” 3” ;	” ;”  ;”" ;—” 3” 3” <	” <” <” <”  <–” =
+” =” =” =”  =”! =’” >” >	’” 4
+” 4–” 4
+” 4” 5”  5”! 5”# 5–” 4
+” 4” 6”! 6”" 6”Ì” 65’” 3” 3’” Ì@” Ì@’” Ì@” Ì@”” ÌB” ÌB” ÌB” ÌB–” ÌB” ÌB” ÌC” ÌC” ÌC” ÌC˜” ÌB” ÌB” ÌD” ÌD” ÌD”& ÌD ”' ÌD!”+ ÌD%”” ÌB” ÌB” ÌE” ÌE›” ÌB” ÌB” ÌF” ÌF” ÌF” ÌF” ÌF”  ÌF”! ÌF”# ÌF”% ÌF’” ÌB” ÌB’” ÌH” ÌH’” ÌH” ÌH’” 1” 1’” 2” 2	’” ÌN” ÌN–” ÌN” ÌN” Ìâ” Ìâ”  Ìâ”! Ìâ–” ÌN” ÌN” Ìã” Ìã” Ìã” Ìã–” ÌN” ÌN” Ìä” Ìä” Ìä” Ìä˜” ÌN” ÌN” Ìå” Ìå” Ìå”( Ìå”) Ìå”/ Ìå#˜” ÌN” ÌN” Ìæ” Ìæ” Ìæ”% Ìæ”& Ìæ”) Ìæ’” ÌO” ÌO–” ÌO” ÌO” ÌŞ	” ÌŞ” ÌŞ” ÌŞÜ ” ÌO” ÌO” Ìß	” Ìß” Ìß” Ìß”! Ìß”# Ìß”% Ìß”' Ìß”, Ìß"”. Ìß$”0 Ìß&”2 Ìß(”5 Ìß+”7 Ìß-”9 Ìß/”; Ìß1Ü ” ÌO” ÌO” Ìà	”! Ìà”" Ìà”# Ìà”/ Ìà%”0 Ìà&”6 Ìà,”7 Ìà-”9 Ìà/”: Ìà0”ÌF Ìà<”ÌG Ìà=”ÌM ÌàÌC”ÌN ÌàÌD’” ÌP
+”' ÌP%’” ÌQ
+” ÌQ’” ÌP
+”' ÌP%–” ÌQ
+” ÌQ” Ì™” Ì™” Ì™” Ì™’” ÌP
+”' ÌP%–” ÌQ
+” ÌQ” Ìš” Ìš” Ìš” Ìš’” ÌP
+”' ÌP%”” ÌQ
+” ÌQ” Ì›”" Ì›’” ÌP
+”' ÌP%–” ÌQ
+” ÌQ” Ìœ” Ìœ”  Ìœ”" Ìœ’” ÌP
+”' ÌP%š” ÌQ
+” ÌQ” Ì” Ì” Ì” Ì”" Ì”$ Ì”& Ì”( Ì ’” ÌR” ÌR’” ÌS” ÌS’” ÌR” ÌR–” ÌS” ÌS” Ì^” Ì^” Ì^” Ì^’” ÌR” ÌRš” ÌS” ÌS” Ì_” Ì_” Ì_” Ì_” Ì_”! Ì_”# Ì_ ”% Ì_"’” ÌT” ÌT–” ÌT” ÌT” ÌU”  ÌU”! ÌU”# ÌUš” ÌT” ÌT” ÌV”! ÌV”" ÌV”# ÌV”( ÌV!”) ÌV"”, ÌV%”- ÌV&”” ÌX” ÌX” ÌX” ÌX–” ÌX” ÌX” ÌY” ÌY” ÌY” ÌY˜” ÌX” ÌX” ÌZ” ÌZ” ÌZ”& ÌZ&”' ÌZ'”+ ÌZ+”” ÌX” ÌX” Ì[” Ì[š” ÌX” ÌX” Ì\” Ì\” Ì\” Ì\” Ì\”  Ì\ ”! Ì\!”# Ì\#’” ÌX” ÌX’” ÌR” ÌR’” ÌS” ÌS’” Ìa” Ìa”” Ìb” Ìb” Ìb”ÌO ÌbÌH’” Ìa” Ìa–” Ìb” Ìb” Ìc” Ìc” Ìc” Ìc’” Ìa” Ìa”” Ìb” Ìb” Ìd” Ìd’” Ìa” Ìa–” Ìb” Ìb” Ìe” Ìe” Ìe” Ìe’” Ìa” Ìa–” Ìb” Ìb” Ìf” Ìf” Ìf” Ìf’” Ìa” Ìaš” Ìb” Ìb” Ìg” Ìg” Ìg” Ìg”  Ìg”" Ìg ”# Ìg!”% Ìg#’” Ìa” Ìa’” Ìb” Ìb”” Ìi” Ìi” Ìi”. Ìi'–” Ìi” Ìi” Ìj” Ìj” Ìj” Ìj”” Ìi” Ìi” Ìk” Ìk–” Ìi” Ìi” Ìl” Ìl” Ìl” Ìl–” Ìi” Ìi” Ìm” Ìm” Ìm” Ìmš” Ìi” Ìi” Ìn” Ìn” Ìn” Ìn”  Ìn”" Ìn ”$ Ìn"”& Ìn$’” Ìi” Ìi’” Ìp” Ìp’” Ìq” Ìq’” Ìp” Ìp–” Ìq” Ìq” Ì–” Ì–” Ì–” Ì–’” Ìp” Ìp˜” Ìq” Ìq” Ì—” Ì—” Ì—”( Ì—%”) Ì—&”4 Ì—1’” Ìr” Ìr’” Ìs” Ìs’” Ìr” Ìr–” Ìs” Ìs” Ì” Ì”  Ì”! Ì’” Ìr” Ìr˜” Ìs” Ìs” Ì‚” Ì‚” Ì‚”- Ì‚)”. Ì‚*”4 Ì‚0’” Ìt” Ìt–” Ìt” Ìt” Ìu” Ìu” Ìu” Ìu–” Ìt” Ìt” Ìv” Ìv” Ìv” Ìv–” Ìt” Ìt” Ìw” Ìw” Ìw ”! Ìw"˜” Ìt” Ìt” Ìx” Ìx” Ìx”$ Ìx%”% Ìx&”, Ìx-” Ìt” Ìt” Ìy” Ìy” Ìy” Ìy”  Ìy!”" Ìy#”# Ìy$”% Ìy&”* Ìy+”Ìœ ÌyÌI”Ì ÌyÌK”” Ì{” Ì{” Ì{” Ì{–” Ì{” Ì{” Ì|” Ì|” Ì|” Ì|˜” Ì{” Ì{” Ì}” Ì}” Ì}”& Ì}(”' Ì})”- Ì}/”” Ì{” Ì{” Ì~” Ì~š” Ì{” Ì{” Ì” Ì” Ì” Ì” Ì” Ì!”  Ì"”" Ì$’” Ì{” Ì{’” Ìr” Ìr’” Ìs” Ìs’” Ì„” Ì„’” Ì…” Ì…’” Ì„” Ì„–” Ì…” Ì…” Ì“” Ì“”  Ì“”! Ì“’” Ì„” Ì„˜” Ì…” Ì…” Ì”” Ì”” Ì””- Ì”)”. Ì”*”4 Ì”0’” Ì†” Ì†–” Ì†” Ì†” Ì‡” Ì‡” Ì‡” Ì‡–” Ì†” Ì†” Ìˆ” Ìˆ” Ìˆ” Ìˆ–” Ì†” Ì†” Ì‰” Ì‰” Ì‰ ”! Ì‰"˜” Ì†” Ì†” ÌŠ” ÌŠ” ÌŠ”$ ÌŠ%”% ÌŠ&”, ÌŠ-” Ì†” Ì†” Ì‹” Ì‹” Ì‹” Ì‹”  Ì‹!”" Ì‹#”# Ì‹$”% Ì‹&”* Ì‹+”Ìœ Ì‹ÌI”Ì Ì‹ÌK”” Ì” Ì” Ì” Ì–” Ì” Ì” Ì” Ì” Ì” Ì˜” Ì” Ì” Ì” Ì” Ì”& Ì(”' Ì)”- Ì/”” Ì” Ì” Ì” Ìš” Ì” Ì” Ì‘” Ì‘” Ì‘” Ì‘” Ì‘” Ì‘!”  Ì‘"”" Ì‘$’” Ì” Ì’” Ì„” Ì„’” Ì…” Ì…’” Ìp” Ìp’” Ìq” Ìq’” ÌP
+”# ÌP%’” ÌQ
+” ÌQ’” ÌŸ
+”' ÌŸ%’” Ì 
+” Ì ’” ÌŸ
+”' ÌŸ%–” Ì 
+” Ì ” ÌØ” ÌØ” ÌØ” ÌØ’” ÌŸ
+”' ÌŸ%–” Ì 
+” Ì ” ÌÙ” ÌÙ” ÌÙ” ÌÙ’” ÌŸ
+”' ÌŸ%”” Ì 
+” Ì ” ÌÚ”" ÌÚ’” ÌŸ
+”' ÌŸ%–” Ì 
+” Ì ” ÌÛ” ÌÛ”  ÌÛ”" ÌÛ’” ÌŸ
+”' ÌŸ%š” Ì 
+” Ì ” ÌÜ” ÌÜ” ÌÜ” ÌÜ”" ÌÜ”$ ÌÜ”& ÌÜ”( ÌÜ ’” Ì¡” Ì¡’” Ì¢” Ì¢’” Ì¡” Ì¡–” Ì¢” Ì¢” Ì­” Ì­” Ì­” Ì­’” Ì¡” Ì¡š” Ì¢” Ì¢” Ì®” Ì®” Ì®” Ì®” Ì®”! Ì®”# Ì® ”% Ì®"’” Ì£” Ì£–” Ì£” Ì£” Ì¤”  Ì¤”! Ì¤”# Ì¤›” Ì£” Ì£” Ì¥”! Ì¥”" Ì¥”# Ì¥”' Ì¥ ”( Ì¥!”6 Ì¥/”8 Ì¥1”9 Ì¥2”” Ì§” Ì§” Ì§” Ì§–” Ì§” Ì§” Ì¨” Ì¨” Ì¨” Ì¨˜” Ì§” Ì§” Ì©” Ì©” Ì©”& Ì©&”' Ì©'”+ Ì©+”” Ì§” Ì§” Ìª” Ìªš” Ì§” Ì§” Ì«” Ì«” Ì«” Ì«” Ì«”  Ì« ”! Ì«!”# Ì«#’” Ì§” Ì§’” Ì¡” Ì¡’” Ì¢” Ì¢”” Ì°” Ì°” Ì°”2 Ì°+–” Ì°” Ì°” Ì±” Ì±” Ì±” Ì±”” Ì°” Ì°” Ì²” Ì²–” Ì°” Ì°” Ì³” Ì³” Ì³” Ì³–” Ì°” Ì°” Ì´” Ì´” Ì´” Ì´š” Ì°” Ì°” Ìµ” Ìµ” Ìµ” Ìµ”  Ìµ”" Ìµ ”# Ìµ!”% Ìµ#’” Ì°” Ì°”” Ì·” Ì·” Ì·”4 Ì·-–” Ì·” Ì·” Ì¸” Ì¸” Ì¸” Ì¸”” Ì·” Ì·” Ì¹” Ì¹–” Ì·” Ì·” Ìº” Ìº” Ìº” Ìº–” Ì·” Ì·” Ì»” Ì»” Ì»” Ì»š” Ì·” Ì·” Ì¼” Ì¼” Ì¼” Ì¼”  Ì¼”" Ì¼ ”$ Ì¼"”& Ì¼$’” Ì·” Ì·’” Ì¾” Ì¾–” Ì¾” Ì¾” ÌÍ” ÌÍ” ÌÍ” ÌÍ–” Ì¾” Ì¾” ÌÎ” ÌÎ” ÌÎ” ÌÎ˜” Ì¾” Ì¾” ÌÏ” ÌÏ” ÌÏ”( ÌÏ%”) ÌÏ&”/ ÌÏ,”” Ì¾” Ì¾” ÌĞ” ÌĞ–” Ì¾” Ì¾” ÌÑ” ÌÑ” ÌÑ” ÌÑÜ ” Ì¾” Ì¾” ÌÒ” ÌÒ” ÌÒ” ÌÒ” ÌÒ”  ÌÒ”! ÌÒ”# ÌÒ ”( ÌÒ%”* ÌÒ'”. ÌÒ+”/ ÌÒ,”= ÌÒ:”? ÌÒ<”ÌA ÌÒ>Ü ” Ì¾” Ì¾” ÌÓ” ÌÓ” ÌÓ” ÌÓ” ÌÓ”! ÌÓ”" ÌÓ”$ ÌÓ!”) ÌÓ&”+ ÌÓ(”/ ÌÓ,”0 ÌÓ-”> ÌÓ;”Ì@ ÌÓ=”ÌC ÌÓÌ@”ÌG ÌÓÌD”ÌI ÌÓÌF”ÌP ÌÓÌM”ÌR ÌÓÌO”ÌS ÌÓÌP”ÌU ÌÓÌR—” Ì¾” Ì¾” ÌÔ” ÌÔ” ÌÔ” ÌÔ” ÌÔ–” ÌÕ” ÌÕ” ÌÕ”) ÌÕ'”+ ÌÕ)”, ÌÕ*’” ÌÖ” ÌÖ’” Ì¿” Ì¿˜” Ì¿” Ì¿” ÌÊ” ÌÊ” ÌÊ”( ÌÊ'”) ÌÊ(”/ ÌÊ.˜” Ì¿” Ì¿” ÌË” ÌË” ÌË”( ÌË'”) ÌË(”/ ÌË.’” ÌÀ” ÌÀ–” ÌÀ” ÌÀ” ÌÁ”  ÌÁ”! ÌÁ”# ÌÁ›” ÌÀ” ÌÀ” ÌÂ”! ÌÂ”" ÌÂ”# ÌÂ”' ÌÂ"”( ÌÂ#”6 ÌÂ1”8 ÌÂ3”9 ÌÂ4”” ÌÄ” ÌÄ” ÌÄ”! ÌÄ–” ÌÄ” ÌÄ” ÌÅ” ÌÅ” ÌÅ” ÌÅ˜” ÌÄ” ÌÄ” ÌÆ” ÌÆ” ÌÆ”& ÌÆ(”' ÌÆ)”- ÌÆ/™” ÌÄ” ÌÄ” ÌÇ” ÌÇ” ÌÇ” ÌÇ!”  ÌÇ"”. ÌÇ0”0 ÌÇ2š” ÌÄ” ÌÄ” ÌÈ” ÌÈ” ÌÈ” ÌÈ” ÌÈ ”  ÌÈ"”! ÌÈ#”# ÌÈ%’” ÌÄ” ÌÄ’” Ì¿” Ì¿’” Ì¾” Ì¾’” ÌŸ
+”# ÌŸ%’” Ì 
+” Ì ’” ÌO” ÌO’” ÌN” ÌN’” 0” 0
+‘” Ìì””  Ìï ” Ìï” Ìï” ÌïÔrF–§version¤file§sources®sourcesContent¥names¨mappingsÀ‘À‘ÀÜr‘”    ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”  	 ‘”  
+ ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”    ‘”  ! ‘”  " ‘”  # ‘”  $ ‘”  % ‘”  & ‘”  ' ‘”  ( ‘”  ) ‘”  * ‘”  + ‘”  , ‘”  - ‘”  . ‘”  / ‘”  0 ‘”  1 ‘”  2 ‘”  3 ‘”  4 ‘”  5 ‘”  6 ‘”  7 ‘”  8 ‘”  9 ‘”  : ‘”  ; ‘”  < ‘”  = ‘”  > ‘”  ? ‘”  Ì@ ‘”  ÌA ‘”  ÌB ‘”  ÌC ‘”  ÌD ‘”  ÌE ‘”  ÌF ‘”  ÌG ‘”  ÌH ‘”  ÌI ‘”  ÌJ ‘”  ÌK ‘”  ÌL ‘”  ÌM ‘”  ÌN ‘”  ÌO ‘”  ÌP ‘”  ÌQ ‘”  ÌR ‘”  ÌS ‘”  ÌT ‘”  ÌU ‘”  ÌV ‘”  ÌW ‘”  ÌX ‘”  ÌY ‘”  ÌZ ‘”  Ì[ ‘”  Ì\ ‘”  Ì] ‘”  Ì^ ‘”  Ì_ ‘”  Ì` ‘”  Ìa ‘”  Ìb ‘”  Ìc ‘”  Ìd ‘”  Ìe ‘”  Ìf ‘”  Ìg ‘”  Ìh ‘”  Ìi ‘”  Ìj ‘”  Ìk ‘”  Ìl ‘”  Ìm ‘”  Ìn ‘”  Ìo ‘”  Ìp ‘”  Ìq ‘”  Ìr ‘”  Ìs ‘”  Ìt ‘”  Ìu ‘”  Ìv ‘”  Ìw ‘”  Ìx ‘”  Ìy ‘”  Ìz ‘”  Ì{ ‘”  Ì| ‘”  Ì} ‘”  Ì~ ‘”  Ì ‘”  Ì€ ‘”  Ì ‘”  Ì‚ ‘”  Ìƒ ‘”  Ì„ ‘”  Ì… ‘”  Ì† ‘”  Ì‡ ‘”  Ìˆ ‘”  Ì‰ ‘”  ÌŠ ‘”  Ì‹ ‘”  ÌŒ ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì‘ ‘”  Ì’ ‘”  Ì“ ‘”  Ì” ‘”  Ì• ‘”  Ì– ‘”  Ì— ‘”  Ì˜ ‘”  Ì™ ‘”  Ìš ‘”  Ì› ‘”  Ìœ ‘”  Ì ‘”  Ì ‘”  ÌŸ ‘”  Ì  ‘”  Ì¡ ‘”  Ì¢ ‘”  Ì£ ‘”  Ì¤ ‘”  Ì¥ ‘”  Ì¦ ‘”  Ì§ ‘”  Ì¨ ‘”  Ì© ‘”  Ìª ‘”  Ì« ‘”  Ì¬ ‘”  Ì­ ‘”  Ì® ‘”  Ì¯ ‘”  Ì° ‘”  Ì± ‘”  Ì² ‘”  Ì³ ‘”  Ì´ ‘”  Ìµ ‘”  Ì¶ ‘”  Ì· ‘”  Ì¸ ‘”  Ì¹ ‘”  Ìº ‘”  Ì» ‘”  Ì¼ ‘”  Ì½ ‘”  Ì¾ ‘”  Ì¿ ‘”  ÌÀ ‘”  ÌÁ ‘”  ÌÂ ‘”  ÌÃ ‘”  ÌÄ ‘”  ÌÅ ‘”  ÌÆ ‘”  ÌÇ ‘”  ÌÈ ‘”  ÌÉ ‘”  ÌÊ ‘”  ÌË ‘”  ÌÌ ‘”  ÌÍ ‘”  ÌÎ ‘”  ÌÏ ‘”  ÌĞ ‘”  ÌÑ ‘”  ÌÒ ‘”  ÌÓ ‘”  ÌÔ ‘”  ÌÕ ‘”  ÌÖ ‘”  Ì× ‘”  ÌØ ‘”  ÌÙ ‘”  ÌÚ ‘”  ÌÛ ‘”  ÌÜ ‘”  Ìİ ‘”  ÌŞ ‘”  Ìß ‘”  Ìà ‘”  Ìá ‘”  Ìâ ‘”  Ìã ‘”  Ìä ‘”  Ìå ‘”  Ìæ ‘”  Ìç ‘”  Ìè ‘”  Ìé ‘”  Ìê ‘”  Ìë ‘”  Ìì ‘”  Ìí ‘”  Ìî ‘”  Ìï ‘”  Ìğ ‘”  Ìñ ‘”  Ìò ‘”  Ìó ‘”  Ìô ‘”  Ìõ ‘”  Ìö ‘”  Ì÷ ‘”  Ìø ‘”  Ìù ‘”  Ìú ‘”  Ìû ‘”  Ìü ‘”  Ìı ‘”  Ìş ‘”  Ìÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
+ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ‘”  Í) ‘”  Í* ‘”  Í+ ‘”  Í, ‘”  Í- ‘”  Í. ‘”  Í/ ‘”  Í0 ‘”  Í1 ‘”  Í2 ‘”  Í3 ‘”  Í4 ‘”  Í5 ‘”  Í6 ‘”  Í7 ‘”  Í8 ‘”  Í9 ‘”  Í: ‘”  Í; ‘”  Í< ‘”  Í= ‘”  Í> ‘”  Í? ‘”  Í@ ‘”  ÍA ‘”  ÍB ‘”  ÍC ‘”  ÍD ‘”  ÍE ‘”  ÍF ‘”  ÍG ‘”  ÍH ‘”  ÍI ‘”  ÍJ ‘”  ÍK ‘”  ÍL ‘”  ÍM ‘”  ÍN ‘”  ÍO ‘”  ÍP ‘”  ÍQ ‘”  ÍR ‘”  ÍS ‘”  ÍT ‘”  ÍU ‘”  ÍV ‘”  ÍW ‘”  ÍX ‘”  ÍY ‘”  ÍZ ‘”  Í[ ‘”  Í\ ‘”  Í] ‘”  Í^ ‘”  Í_ ‘”  Í` ‘”  Ía ‘”  Íb ‘”  Íc ‘”  Íd ‘”  Íe ‘”  Íf ‘”  Íg ‘”  Íh ‘”  Íi ‘”  Íj ‘”  Ík ‘”  Íl ‘”  Ím ‘”  Ín ‘”  Ío ‘”  Íp ‘”  Íq ÔrG’§missing¦pluginÃ¦genAbcÂÔ  ÔrH”²dynamicImportCache¹exportAllDeclarationCache»exportNamedDeclarationCache«importCache“ÔrI•¤type¥start£endªspecifiers¦source±ImportDeclarationÌ€Ì¢‘ÔrJ”¤type¥start£end¥local¶ImportDefaultSpecifierÌ‡ÌÔrK”¤type¥start£end¤nameªIdentifierÌ‡Ì¦routerÔrL•¤type¥start£end¥value£raw§LiteralÌ“Ì¡¬@ohos.router®"@ohos.router"I±ImportDeclarationÌ¤Ìğ‘J¶ImportDefaultSpecifierÌ«ÌÀKªIdentifierÌ«ÌÀµConfigurationConstantL§LiteralÌÆÌïÙ'@ohos.app.ability.ConfigurationConstantÙ)"@ohos.app.ability.ConfigurationConstant"I±ImportDeclarationÌòÍ&‘ÔrM•¤type¥start£end¨imported¥local¯ImportSpecifierÌûÍKªIdentifierÌûÍ«ThemeHelperKªIdentifierÌûÍ«ThemeHelperL§LiteralÍÍ%µ../common/ThemeHelper·'../common/ThemeHelper'

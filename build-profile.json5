@@ -1,0 +1,50 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "storeFile": "C:/Users/a1519/Desktop/AI文本转换/aitransformer.p12",
+          "storePassword": "00000019E8166288C644BCA07C910A9AE728FF845D7A93C31C26436D17B93F3100646FFCAEAC6CE733",
+          "keyAlias": "aitransformer",
+          "keyPassword": "000000199EBC5667377AF4FF1C8E94DC6AD5592C4575A033D4AF80975EFC1228581A518414F3F8BE1A",
+          "signAlg": "SHA256withECDSA",
+          "profile": "C:/Users/a1519/Desktop/AI文本转换/aitransformer2Release.p7b",
+          "certpath": "C:/Users/a1519/Desktop/AI文本转换/aitransformer.cer"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compatibleSdkVersion": "6.1.0(23)",
+        "targetSdkVersion": "6.1.0(23)",
+        "runtimeOS": "HarmonyOS"
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug"
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}

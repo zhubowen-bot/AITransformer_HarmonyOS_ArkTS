@@ -1,0 +1,28 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "AI一站清"
+    },
+    {
+      "name": "tab_tools",
+      "value": "工具集"
+    },
+    {
+      "name": "tab_convert",
+      "value": "文本转换"
+    },
+    {
+      "name": "tab_settings",
+      "value": "设置"
+    },
+    {
+      "name": "microphone_permission_reason",
+      "value": "用于网页中的语音输入和录音功能"
+    },
+    {
+      "name": "camera_permission_reason",
+      "value": "用于网页中的视频通话和拍照功能"
+    }
+  ]
+}

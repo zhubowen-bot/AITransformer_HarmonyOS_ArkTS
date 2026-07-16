@@ -1,0 +1,1471 @@
+Ôr@Ÿªassertions¤code´customTransformCache¬dependencies¢id¤meta±moduleSideEffects¬originalCode±originalSourcemap«resolvedIds®sourcemapChainµsyntheticNamedExportsµtransformDependencies®transformFiles¨cacheAstÔrAÚŠPif (!("finalizeConstruction" in ViewPU.prototype)) {
+    Reflect.set(ViewPU.prototype, "finalizeConstruction", () => { });
+}
+import webview from "@ohos.web.webview";
+import router from "@ohos.router";
+import window from "@ohos.window";
+import deviceInfo from "@ohos.deviceInfo";
+import abilityAccessCtrl from "@ohos.abilityAccessCtrl";
+import ConfigurationConstant from "@ohos.app.ability.ConfigurationConstant";
+import { DEFAULT_AI_TOOLS, DEFAULT_SEARCH_TOOLS } from '../model/ToolData';
+import { ThemeHelper } from '../common/ThemeHelper';
+class WebPage extends ViewPU {
+    constructor(parent, params, __localStorage, elmtId = -1, paramsLambda = undefined, extraInfo) {
+        super(parent, __localStorage, elmtId, extraInfo);
+        if (typeof paramsLambda === "function") {
+            this.paramsGenerator_ = paramsLambda;
+        }
+        this.__currentUrl = new ObservedPropertySimplePU('', this, "currentUrl");
+        this.__pageTitle = new ObservedPropertySimplePU('', this, "pageTitle");
+        this.__isLoading = new ObservedPropertySimplePU(true, this, "isLoading");
+        this.__canGoBack = new ObservedPropertySimplePU(false, this, "canGoBack");
+        this.__canGoForward = new ObservedPropertySimplePU(false, this, "canGoForward");
+        this.__showDropdown = new ObservedPropertySimplePU(false, this, "showDropdown");
+        this.__bottomSafeArea = new ObservedPropertySimplePU(0, this, "bottomSafeArea");
+        this.__appTheme = this.createStorageLink('appTheme', 'system', "appTheme");
+        this.__currentColorMode = this.createStorageProp('currentColorMode', ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT, "currentColorMode");
+        this.__webDarkMode = new ObservedPropertySimplePU(WebDarkMode.Off, this, "webDarkMode");
+        this.__webBgColor = new ObservedPropertyObjectPU(Color.White, this, "webBgColor");
+        this.__navBarColor = new ObservedPropertyObjectPU({ "id": 16777246, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" }, this, "navBarColor");
+        this.controller = new webview.WebviewController();
+        this.isMobileDevice = false;
+        this.dropdownCategories = [];
+        this.setInitiallyProvidedValue(params);
+        this.declareWatch("appTheme", this.onThemeChanged);
+        this.declareWatch("currentColorMode", this.onThemeChanged);
+        this.finalizeConstruction();
+    }
+    setInitiallyProvidedValue(params) {
+        if (params.currentUrl !== undefined) {
+            this.currentUrl = params.currentUrl;
+        }
+        if (params.pageTitle !== undefined) {
+            this.pageTitle = params.pageTitle;
+        }
+        if (params.isLoading !== undefined) {
+            this.isLoading = params.isLoading;
+        }
+        if (params.canGoBack !== undefined) {
+            this.canGoBack = params.canGoBack;
+        }
+        if (params.canGoForward !== undefined) {
+            this.canGoForward = params.canGoForward;
+        }
+        if (params.showDropdown !== undefined) {
+            this.showDropdown = params.showDropdown;
+        }
+        if (params.bottomSafeArea !== undefined) {
+            this.bottomSafeArea = params.bottomSafeArea;
+        }
+        if (params.webDarkMode !== undefined) {
+            this.webDarkMode = params.webDarkMode;
+        }
+        if (params.webBgColor !== undefined) {
+            this.webBgColor = params.webBgColor;
+        }
+        if (params.navBarColor !== undefined) {
+            this.navBarColor = params.navBarColor;
+        }
+        if (params.controller !== undefined) {
+            this.controller = params.controller;
+        }
+        if (params.isMobileDevice !== undefined) {
+            this.isMobileDevice = params.isMobileDevice;
+        }
+        if (params.dropdownCategories !== undefined) {
+            this.dropdownCategories = params.dropdownCategories;
+        }
+    }
+    updateStateVars(params) {
+    }
+    purgeVariableDependenciesOnElmtId(rmElmtId) {
+        this.__currentUrl.purgeDependencyOnElmtId(rmElmtId);
+        this.__pageTitle.purgeDependencyOnElmtId(rmElmtId);
+        this.__isLoading.purgeDependencyOnElmtId(rmElmtId);
+        this.__canGoBack.purgeDependencyOnElmtId(rmElmtId);
+        this.__canGoForward.purgeDependencyOnElmtId(rmElmtId);
+        this.__showDropdown.purgeDependencyOnElmtId(rmElmtId);
+        this.__bottomSafeArea.purgeDependencyOnElmtId(rmElmtId);
+        this.__appTheme.purgeDependencyOnElmtId(rmElmtId);
+        this.__currentColorMode.purgeDependencyOnElmtId(rmElmtId);
+        this.__webDarkMode.purgeDependencyOnElmtId(rmElmtId);
+        this.__webBgColor.purgeDependencyOnElmtId(rmElmtId);
+        this.__navBarColor.purgeDependencyOnElmtId(rmElmtId);
+    }
+    aboutToBeDeleted() {
+        this.__currentUrl.aboutToBeDeleted();
+        this.__pageTitle.aboutToBeDeleted();
+        this.__isLoading.aboutToBeDeleted();
+        this.__canGoBack.aboutToBeDeleted();
+        this.__canGoForward.aboutToBeDeleted();
+        this.__showDropdown.aboutToBeDeleted();
+        this.__bottomSafeArea.aboutToBeDeleted();
+        this.__appTheme.aboutToBeDeleted();
+        this.__currentColorMode.aboutToBeDeleted();
+        this.__webDarkMode.aboutToBeDeleted();
+        this.__webBgColor.aboutToBeDeleted();
+        this.__navBarColor.aboutToBeDeleted();
+        SubscriberManager.Get().delete(this.id__());
+        this.aboutToBeDeletedInternal();
+    }
+    get currentUrl() {
+        return this.__currentUrl.get();
+    }
+    set currentUrl(newValue) {
+        this.__currentUrl.set(newValue);
+    }
+    get pageTitle() {
+        return this.__pageTitle.get();
+    }
+    set pageTitle(newValue) {
+        this.__pageTitle.set(newValue);
+    }
+    get isLoading() {
+        return this.__isLoading.get();
+    }
+    set isLoading(newValue) {
+        this.__isLoading.set(newValue);
+    }
+    get canGoBack() {
+        return this.__canGoBack.get();
+    }
+    set canGoBack(newValue) {
+        this.__canGoBack.set(newValue);
+    }
+    get canGoForward() {
+        return this.__canGoForward.get();
+    }
+    set canGoForward(newValue) {
+        this.__canGoForward.set(newValue);
+    }
+    get showDropdown() {
+        return this.__showDropdown.get();
+    }
+    set showDropdown(newValue) {
+        this.__showDropdown.set(newValue);
+    }
+    get bottomSafeArea() {
+        return this.__bottomSafeArea.get();
+    }
+    set bottomSafeArea(newValue) {
+        this.__bottomSafeArea.set(newValue);
+    }
+    get appTheme() {
+        return this.__appTheme.get();
+    }
+    set appTheme(newValue) {
+        this.__appTheme.set(newValue);
+    }
+    get currentColorMode() {
+        return this.__currentColorMode.get();
+    }
+    set currentColorMode(newValue) {
+        this.__currentColorMode.set(newValue);
+    }
+    get webDarkMode() {
+        return this.__webDarkMode.get();
+    }
+    set webDarkMode(newValue) {
+        this.__webDarkMode.set(newValue);
+    }
+    get webBgColor() {
+        return this.__webBgColor.get();
+    }
+    set webBgColor(newValue) {
+        this.__webBgColor.set(newValue);
+    }
+    get navBarColor() {
+        return this.__navBarColor.get();
+    }
+    set navBarColor(newValue) {
+        this.__navBarColor.set(newValue);
+    }
+    async aboutToAppear() {
+        this.isMobileDevice = this.checkIsMobileDevice();
+        this.loadDropdownTools();
+        let params = router.getParams();
+        if (params) {
+            let urlValue = params['url'];
+            let titleValue = params['title'];
+            if (urlValue) {
+                this.currentUrl = urlValue;
+            }
+            if (titleValue) {
+                this.pageTitle = titleValue;
+            }
+        }
+        this.onThemeChanged();
+        this.requestMediaPermissions();
+        // Preconnect current URL domain to speed up initial page load
+        if (this.currentUrl) {
+            try {
+                webview.WebviewController.prepareForPageLoad(this.currentUrl, true, 2);
+            }
+            catch (e) {
+                console.error('prepareForPageLoad error', this.currentUrl, JSON.stringify(e));
+            }
+        }
+        // è·å–åº•éƒ¨å¯¼èˆªæ¡é«˜åº¦ï¼Œè®© Web é¡µé¢å»¶ä¼¸åˆ°åº•éƒ¨å®‰å…¨åŒº
+        try {
+            let mainWindow = await window.getLastWindow(getContext(this));
+            let avoidArea = mainWindow.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR);
+            this.bottomSafeArea = px2vp(avoidArea.bottomRect.height);
+        }
+        catch (e) {
+            console.error('getWindowAvoidArea error', JSON.stringify(e));
+        }
+        // è®¾ç½®çŠ¶æ€æ èƒŒæ™¯è‰²ä¸é¡µé¢é¡¶éƒ¨é¢œè‰²ä¸€è‡´
+        let effectiveMode = this.currentColorMode;
+        if (effectiveMode === ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET) {
+            effectiveMode = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+        }
+        let isDark = ThemeHelper.isEffectiveDarkMode(this.appTheme, effectiveMode);
+        ThemeHelper.setStatusBarColor(getContext(this), isDark ? '#FF000000' : '#FFF8FAFC');
+    }
+    requestMediaPermissions() {
+        try {
+            let atManager = abilityAccessCtrl.createAtManager();
+            let context = getContext(this);
+            atManager.requestPermissionsFromUser(context, ['ohos.permission.MICROPHONE', 'ohos.permission.CAMERA'])
+                .then((data) => {
+                console.info('Permission request result:' + JSON.stringify(data));
+            })
+                .catch((error) => {
+                console.error('Permission request failed, code:' + error.code + ', message:' + error.message);
+            });
+        }
+        catch (e) {
+            console.error('requestMediaPermissions error', JSON.stringify(e));
+        }
+    }
+    checkIsMobileDevice() {
+        let deviceType = deviceInfo.deviceType;
+        return deviceType === 'phone' || deviceType === 'tablet';
+    }
+    onThemeChanged() {
+        let effectiveMode = this.currentColorMode;
+        if (effectiveMode === ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET) {
+            effectiveMode = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+        }
+        let isDark = ThemeHelper.isEffectiveDarkMode(this.appTheme, effectiveMode);
+        this.webDarkMode = isDark ? WebDarkMode.On : WebDarkMode.Off;
+        this.webBgColor = isDark ? Color.Black : Color.White;
+        this.navBarColor = isDark ? Color.Black : { "id": 16777246, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" };
+        ThemeHelper.setStatusBarColor(getContext(this), isDark ? '#FF000000' : '#FFF8FAFC');
+    }
+    loadDropdownTools() {
+        // Read current state from AppStorage
+        let hiddenStr = AppStorage.get('hiddenTools');
+        let hiddenTools = [];
+        if (hiddenStr && hiddenStr !== '[]') {
+            try {
+                hiddenTools = JSON.parse(hiddenStr);
+            }
+            catch (e) {
+                hiddenTools = [];
+            }
+        }
+        let toolsOrderStr = AppStorage.get('toolsOrder');
+        let toolsOrder = {};
+        if (toolsOrderStr && toolsOrderStr !== '{}') {
+            try {
+                toolsOrder = JSON.parse(toolsOrderStr);
+            }
+            catch (e) {
+                toolsOrder = {};
+            }
+        }
+        let customStr = AppStorage.get('customTools');
+        let customTools = [];
+        if (customStr && customStr !== '[]') {
+            try {
+                customTools = JSON.parse(customStr);
+            }
+            catch (e) {
+                customTools = [];
+            }
+        }
+        let applyOrder = (tools, order) => {
+            if (!order || order.length === 0) {
+                return tools;
+            }
+            let sorted = [];
+            for (let id of order) {
+                for (let tool of tools) {
+                    if (tool.id === id) {
+                        sorted.push(tool);
+                        break;
+                    }
+                }
+            }
+            for (let tool of tools) {
+                let found = false;
+                for (let s of sorted) {
+                    if (s.id === tool.id) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    sorted.push(tool);
+                }
+            }
+            return sorted;
+        };
+        let categories = [];
+        // AI tools
+        let aiTools = [];
+        for (let tool of DEFAULT_AI_TOOLS) {
+            if (hiddenTools.indexOf(tool.id) === -1) {
+                aiTools.push({ id: tool.id, name: tool.name, url: tool.url });
+            }
+        }
+        for (let item of customTools) {
+            if (item.category === 'ai') {
+                aiTools.push({ id: item.id, name: item.name, url: item.url });
+            }
+        }
+        aiTools = applyOrder(aiTools, toolsOrder['ai']);
+        if (aiTools.length > 0) {
+            categories.push({ name: 'AIç½‘å€å¯¼èˆª', tools: aiTools });
+        }
+        // Search tools
+        let searchTools = [];
+        for (let tool of DEFAULT_SEARCH_TOOLS) {
+            if (hiddenTools.indexOf(tool.id) === -1) {
+                searchTools.push({ id: tool.id, name: tool.name, url: tool.url });
+            }
+        }
+        for (let item of customTools) {
+            if (item.category === 'search') {
+                searchTools.push({ id: item.id, name: item.name, url: item.url });
+            }
+        }
+        searchTools = applyOrder(searchTools, toolsOrder['search']);
+        if (searchTools.length > 0) {
+            categories.push({ name: 'æœç´¢å¼•æ“', tools: searchTools });
+        }
+        // Saved tools
+        let savedTools = [];
+        for (let item of customTools) {
+            if (item.category === 'saved') {
+                savedTools.push({ id: item.id, name: item.name, url: item.url });
+            }
+        }
+        savedTools = applyOrder(savedTools, toolsOrder['saved']);
+        if (savedTools.length > 0) {
+            categories.push({ name: 'æˆ‘çš„ä¿å­˜', tools: savedTools });
+        }
+        this.dropdownCategories = categories;
+    }
+    setMobileUserAgent() {
+        if (this.isMobileDevice) {
+            try {
+                let mobileUA = 'Mozilla/5.0 (Linux; Android 12; HarmonyOS) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.230 Mobile Safari/537.36';
+                this.controller.setCustomUserAgent(mobileUA);
+            }
+            catch (e) {
+                console.error('setCustomUserAgent error', JSON.stringify(e));
+            }
+        }
+    }
+    closeWebPage() {
+        router.back();
+    }
+    goBack() {
+        if (this.controller.accessStep(-1)) {
+            this.controller.backward();
+            this.canGoBack = this.controller.accessStep(-1);
+            this.canGoForward = this.controller.accessStep(1);
+        }
+    }
+    goForward() {
+        if (this.controller.accessStep(1)) {
+            this.controller.forward();
+            this.canGoBack = this.controller.accessStep(-1);
+            this.canGoForward = this.controller.accessStep(1);
+        }
+    }
+    refreshPage() {
+        this.controller.refresh();
+    }
+    switchToTool(url, name) {
+        this.showDropdown = false;
+        if (url === this.currentUrl) {
+            return;
+        }
+        this.pageTitle = name;
+        this.currentUrl = url;
+        this.isLoading = true;
+        this.controller.loadUrl(url);
+    }
+    getAllDropdownTools() {
+        let allTools = [];
+        for (let category of this.dropdownCategories) {
+            for (let tool of category.tools) {
+                allTools.push(tool);
+            }
+        }
+        return allTools;
+    }
+    prefetchTools(urls) {
+        for (let url of urls) {
+            try {
+                this.controller.prefetchPage(url);
+            }
+            catch (e) {
+                console.error('prefetchPage error', url, JSON.stringify(e));
+            }
+        }
+    }
+    prefetchNextTools(count) {
+        let allTools = this.getAllDropdownTools();
+        if (allTools.length === 0) {
+            return;
+        }
+        let currentIndex = -1;
+        for (let i = 0; i < allTools.length; i++) {
+            if (allTools[i].url === this.currentUrl) {
+                currentIndex = i;
+                break;
+            }
+        }
+        let urls = [];
+        for (let i = 1; i <= count; i++) {
+            let idx = currentIndex >= 0 ? (currentIndex + i) % allTools.length : i - 1;
+            let tool = allTools[idx];
+            if (tool && tool.url !== this.currentUrl) {
+                let exists = false;
+                for (let u of urls) {
+                    if (u === tool.url) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
+                    urls.push(tool.url);
+                }
+            }
+        }
+        this.prefetchTools(urls);
+    }
+    prefetchDropdownTools() {
+        let allTools = this.getAllDropdownTools();
+        let urls = [];
+        let limit = 5;
+        let added = 0;
+        for (let tool of allTools) {
+            if (tool.url !== this.currentUrl) {
+                urls.push(tool.url);
+                added++;
+                if (added >= limit) {
+                    break;
+                }
+            }
+        }
+        this.prefetchTools(urls);
+    }
+    aboutToDisappear() {
+        try {
+            webview.WebCookieManager.saveCookieAsync();
+        }
+        catch (e) {
+            console.error('saveCookieAsync error', JSON.stringify(e));
+        }
+    }
+    initialRender() {
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Column.create();
+            Column.width('100%');
+            Column.height('100%');
+            Column.backgroundColor({ "id": 16777246, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Top Navigation Bar
+            Row.create();
+            // Top Navigation Bar
+            Row.width('100%');
+            // Top Navigation Bar
+            Row.padding({ left: 8, right: 8, top: 4, bottom: 4 });
+            // Top Navigation Bar
+            Row.backgroundColor(ObservedObject.GetRawObject(this.navBarColor));
+            // Top Navigation Bar
+            Row.border({ width: { bottom: 1 }, color: { "id": 16777247, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" } });
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Back button
+            Button.createWithChild();
+            // Back button
+            Button.width(28);
+            // Back button
+            Button.height(28);
+            // Back button
+            Button.backgroundColor(Color.Transparent);
+            // Back button
+            Button.borderRadius(14);
+            // Back button
+            Button.enabled(this.canGoBack);
+            // Back button
+            Button.onClick(() => {
+                this.goBack();
+            });
+            // Back button
+            Button.margin({ left: 4 });
+        }, Button);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            SymbolGlyph.create({ "id": 125832679, "type": 40000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            SymbolGlyph.fontSize(17);
+            SymbolGlyph.fontColor([this.canGoBack ? { "id": 16777255, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" } : { "id": 16777248, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" }]);
+        }, SymbolGlyph);
+        // Back button
+        Button.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Forward button
+            Button.createWithChild();
+            // Forward button
+            Button.width(28);
+            // Forward button
+            Button.height(28);
+            // Forward button
+            Button.backgroundColor(Color.Transparent);
+            // Forward button
+            Button.borderRadius(14);
+            // Forward button
+            Button.enabled(this.canGoForward);
+            // Forward button
+            Button.onClick(() => {
+                this.goForward();
+            });
+            // Forward button
+            Button.margin({ left: 4 });
+        }, Button);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            SymbolGlyph.create({ "id": 125832680, "type": 40000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            SymbolGlyph.fontSize(17);
+            SymbolGlyph.fontColor([this.canGoForward ? { "id": 16777255, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" } : { "id": 16777248, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" }]);
+        }, SymbolGlyph);
+        // Forward button
+        Button.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Title + Dropdown button
+            Column.create();
+            // Title + Dropdown button
+            Column.layoutWeight(1);
+            // Title + Dropdown button
+            Column.alignItems(HorizontalAlign.Center);
+            // Title + Dropdown button
+            Column.margin({ left: 8, right: 8 });
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create(this.pageTitle);
+            Text.fontSize(14);
+            Text.fontWeight(FontWeight.Medium);
+            Text.fontColor({ "id": 16777255, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            Text.maxLines(1);
+            Text.textOverflow({ overflow: TextOverflow.Ellipsis });
+        }, Text);
+        Text.pop();
+        // Title + Dropdown button
+        Column.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Quick switch button
+            Button.createWithChild();
+            // Quick switch button
+            Button.width(28);
+            // Quick switch button
+            Button.height(28);
+            // Quick switch button
+            Button.backgroundColor(Color.Transparent);
+            // Quick switch button
+            Button.borderRadius(14);
+            // Quick switch button
+            Button.onClick(() => {
+                this.showDropdown = !this.showDropdown;
+                if (this.showDropdown) {
+                    this.loadDropdownTools();
+                    this.prefetchDropdownTools();
+                }
+            });
+        }, Button);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            SymbolGlyph.create(this.showDropdown ? { "id": 125832665, "type": 40000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" } : { "id": 125832666, "type": 40000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            SymbolGlyph.fontSize(17);
+            SymbolGlyph.fontColor([{ "id": 16777256, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" }]);
+        }, SymbolGlyph);
+        // Quick switch button
+        Button.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // Refresh button
+            Button.createWithChild();
+            // Refresh button
+            Button.width(28);
+            // Refresh button
+            Button.height(28);
+            // Refresh button
+            Button.backgroundColor(Color.Transparent);
+            // Refresh button
+            Button.borderRadius(14);
+            // Refresh button
+            Button.onClick(() => {
+                this.refreshPage();
+            });
+            // Refresh button
+            Button.margin({ left: 4 });
+        }, Button);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            SymbolGlyph.create({ "id": 125831551, "type": 40000, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+            SymbolGlyph.fontSize(17);
+            SymbolGlyph.fontColor([{ "id": 16777255, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" }]);
+        }, SymbolGlyph);
+        // Refresh button
+        Button.pop();
+        // Top Navigation Bar
+        Row.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            If.create();
+            // Dropdown Menu
+            if (this.showDropdown) {
+                this.ifElseBranchUpdateFunction(0, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Column.create();
+                        Column.width('100%');
+                        Column.height(300);
+                        Column.backgroundColor({ "id": 16777245, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+                        Column.borderRadius({ bottomLeft: 12, bottomRight: 12 });
+                        Column.shadow({ radius: 8, color: 'rgba(0,0,0,0.1)', offsetY: 4 });
+                        Column.position({ x: 0, y: 0 });
+                        Column.zIndex(10);
+                    }, Column);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Scroll.create();
+                        Scroll.layoutWeight(1);
+                        Scroll.width('100%');
+                    }, Scroll);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Column.create();
+                        Column.width('100%');
+                        Column.padding({ bottom: 8 });
+                    }, Column);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        ForEach.create();
+                        const forEachItemGenFunction = _item => {
+                            const category = _item;
+                            this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                // Category title
+                                Text.create(category.name);
+                                // Category title
+                                Text.fontSize(12);
+                                // Category title
+                                Text.fontWeight(FontWeight.Bold);
+                                // Category title
+                                Text.fontColor({ "id": 16777256, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+                                // Category title
+                                Text.width('100%');
+                                // Category title
+                                Text.padding({ left: 16, top: 10, bottom: 4 });
+                            }, Text);
+                            // Category title
+                            Text.pop();
+                            this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                // Tools in category
+                                ForEach.create();
+                                const forEachItemGenFunction = _item => {
+                                    const tool = _item;
+                                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                        Row.create();
+                                        Row.width('100%');
+                                        Row.padding({ left: 16, right: 16, top: 8, bottom: 8 });
+                                        Row.borderRadius(8);
+                                        Row.backgroundColor(tool.url === this.currentUrl ?
+                                            ThemeHelper.getAccentLightColor() : { "id": 16777245, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+                                        Row.onClick(() => {
+                                            this.switchToTool(tool.url, tool.name);
+                                        });
+                                    }, Row);
+                                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                        Text.create(tool.name);
+                                        Text.fontSize(14);
+                                        Text.fontColor(tool.url === this.currentUrl ? ThemeHelper.getAccentColor() : { "id": 16777255, "type": 10001, params: [], "bundleName": "com.aitransformer.bowenapp", "moduleName": "entry" });
+                                        Text.fontWeight(tool.url === this.currentUrl ? FontWeight.Medium : FontWeight.Regular);
+                                    }, Text);
+                                    Text.pop();
+                                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                        Blank.create();
+                                    }, Blank);
+                                    Blank.pop();
+                                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                        If.create();
+                                        if (tool.url === this.currentUrl) {
+                                            this.ifElseBranchUpdateFunction(0, () => {
+                                                this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                                    Text.create('å½“å‰');
+                                                    Text.fontSize(11);
+                                                    Text.fontColor(ThemeHelper.getAccentColor());
+                                                    Text.backgroundColor(ThemeHelper.getAccentLightColor());
+                                                    Text.borderRadius(8);
+                                                    Text.padding({ left: 8, right: 8, top: 4, bottom: 4 });
+                                                }, Text);
+                                                Text.pop();
+                                            });
+                                        }
+                                        else {
+                                            this.ifElseBranchUpdateFunction(1, () => {
+                                            });
+                                        }
+                                    }, If);
+                                    If.pop();
+                                    Row.pop();
+                                };
+                                this.forEachUpdateFunction(elmtId, category.tools, forEachItemGenFunction, (tool) => tool.id, false, false);
+                            }, ForEach);
+                            // Tools in category
+                            ForEach.pop();
+                        };
+                        this.forEachUpdateFunction(elmtId, this.dropdownCategories, forEachItemGenFunction, (category) => category.name, false, false);
+                    }, ForEach);
+                    ForEach.pop();
+                    Column.pop();
+                    Scroll.pop();
+                    Column.pop();
+                });
+            }
+            // WebView Container
+            else {
+                this.ifElseBranchUpdateFunction(1, () => {
+                });
+            }
+        }, If);
+        If.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            // WebView Container
+            Stack.create();
+            // WebView Container
+            Stack.layoutWeight(1);
+            // WebView Container
+            Stack.width('100%');
+        }, Stack);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Web.create({ src: this.currentUrl, controller: this.controller });
+            Web.layoutWeight(1);
+            Web.width('100%');
+            Web.domStorageAccess(true);
+            Web.javaScriptAccess(true);
+            Web.onlineImageAccess(true);
+            Web.imageAccess(true);
+            Web.fileAccess(true);
+            Web.databaseAccess(true);
+            Web.mixedMode(MixedMode.All);
+            Web.horizontalScrollBarAccess(false);
+            Web.verticalScrollBarAccess(false);
+            Web.backgroundColor(ObservedObject.GetRawObject(this.webBgColor));
+            Web.darkMode(this.webDarkMode);
+            Web.forceDarkAccess(this.webDarkMode === WebDarkMode.On);
+            Web.margin({ bottom: -this.bottomSafeArea });
+            Web.onClick(() => {
+                if (this.showDropdown) {
+                    this.showDropdown = false;
+                }
+            });
+            Web.onControllerAttached(() => {
+                this.setMobileUserAgent();
+            });
+            Web.onPermissionRequest((event) => {
+                if (event) {
+                    event.request.grant(event.request.getAccessibleResource());
+                }
+            });
+            Web.onPageBegin((event) => {
+                if (event) {
+                    this.isLoading = true;
+                }
+            });
+            Web.onPageEnd(() => {
+                this.isLoading = false;
+                this.canGoBack = this.controller.accessStep(-1);
+                this.canGoForward = this.controller.accessStep(1);
+                this.prefetchNextTools(3);
+            });
+            Web.onErrorReceive((event) => {
+                if (event) {
+                    this.isLoading = false;
+                }
+            });
+            Web.onRenderExited(() => {
+                this.controller.loadUrl(this.currentUrl);
+            });
+        }, Web);
+        // WebView Container
+        Stack.pop();
+        Column.pop();
+    }
+    rerender() {
+        this.updateDirtyElements();
+    }
+    static getEntryName() {
+        return "WebPage";
+    }
+}
+registerNamedRoute(() => new WebPage(undefined, {}), "", { bundleName: "com.aitransformer.bowenapp", moduleName: "entry", pagePath: "pages/WebPage", pageFullPath: "entry/src/main/ets/pages/WebPage", integratedHsp: "false", moduleType: "followWithHap" });
+//# sourceMappingURL=WebPage.js.mapÂ˜Ùk hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.web.webview.d.tsÙf hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.router.d.tsÙf hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.window.d.tsÙj hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.deviceInfo.d.tsÙq hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.abilityAccessCtrl.d.tsÙ hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.app.ability.ConfigurationConstant.d.tsÙnC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entry\src\main\ets\model\ToolData.etsÙrC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entry\src\main\ets\common\ThemeHelper.etsÙmC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entry\src\main\ets\pages\WebPage.etsÔrBšªmoduleName±isLocalDependency¯isNodeEntryFile§pkgPath±belongProjectPath§pkgNameªpkgVersion±dependencyPkgInfo°belongModulePath¬shouldEmitJs¥entryÃÂÙNC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entryÙHC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts¥entry¥1.0.0Ô  ÙNC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entryÃÃÚEêimport { webview } from '@kit.ArkWeb';
+import { router, window } from '@kit.ArkUI';
+import { deviceInfo } from '@kit.BasicServicesKit';
+import { abilityAccessCtrl, common, ConfigurationConstant } from '@kit.AbilityKit';
+import { BusinessError } from '@kit.BasicServicesKit';
+import { DEFAULT_AI_TOOLS, DEFAULT_SEARCH_TOOLS, CustomToolData } from '../model/ToolData';
+import { ThemeHelper } from '../common/ThemeHelper';
+
+interface DropdownTool {
+  id: string;
+  name: string;
+  url: string;
+}
+
+interface DropdownCategory {
+  name: string;
+  tools: DropdownTool[];
+}
+
+@Entry
+@Component
+struct WebPage {
+  @State currentUrl: string = '';
+  @State pageTitle: string = '';
+  @State isLoading: boolean = true;
+  @State canGoBack: boolean = false;
+  @State canGoForward: boolean = false;
+  @State showDropdown: boolean = false;
+  @State bottomSafeArea: number = 0;
+  @StorageLink('appTheme') @Watch('onThemeChanged') appTheme: string = 'system';
+  @StorageProp('currentColorMode') @Watch('onThemeChanged') currentColorMode: ConfigurationConstant.ColorMode =
+    ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+  @State webDarkMode: WebDarkMode = WebDarkMode.Off;
+  @State webBgColor: ResourceColor = Color.White;
+  @State navBarColor: ResourceColor = $r('app.color.bg_primary');
+
+  private controller: webview.WebviewController = new webview.WebviewController();
+  private isMobileDevice: boolean = false;
+  private dropdownCategories: DropdownCategory[] = [];
+
+  async aboutToAppear(): Promise<void> {
+    this.isMobileDevice = this.checkIsMobileDevice();
+    this.loadDropdownTools();
+
+    let params: Record<string, string> = router.getParams() as Record<string, string>;
+    if (params) {
+      let urlValue: string = params['url'];
+      let titleValue: string = params['title'];
+      if (urlValue) {
+        this.currentUrl = urlValue;
+      }
+      if (titleValue) {
+        this.pageTitle = titleValue;
+      }
+    }
+    this.onThemeChanged();
+    this.requestMediaPermissions();
+
+    // Preconnect current URL domain to speed up initial page load
+    if (this.currentUrl) {
+      try {
+        webview.WebviewController.prepareForPageLoad(this.currentUrl, true, 2);
+      } catch (e) {
+        console.error('prepareForPageLoad error', this.currentUrl, JSON.stringify(e));
+      }
+    }
+
+    // è·å–åº•éƒ¨å¯¼èˆªæ¡é«˜åº¦ï¼Œè®© Web é¡µé¢å»¶ä¼¸åˆ°åº•éƒ¨å®‰å…¨åŒº
+    try {
+      let mainWindow: window.Window = await window.getLastWindow(getContext(this) as common.UIAbilityContext);
+      let avoidArea: window.AvoidArea = mainWindow.getWindowAvoidArea(window.AvoidAreaType.TYPE_NAVIGATION_INDICATOR);
+      this.bottomSafeArea = px2vp(avoidArea.bottomRect.height);
+    } catch (e) {
+      console.error('getWindowAvoidArea error', JSON.stringify(e));
+    }
+
+    // è®¾ç½®çŠ¶æ€æ èƒŒæ™¯è‰²ä¸é¡µé¢é¡¶éƒ¨é¢œè‰²ä¸€è‡´
+    let effectiveMode: ConfigurationConstant.ColorMode = this.currentColorMode;
+    if (effectiveMode === ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET) {
+      effectiveMode = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+    }
+    let isDark: boolean = ThemeHelper.isEffectiveDarkMode(this.appTheme, effectiveMode);
+    ThemeHelper.setStatusBarColor(getContext(this) as common.UIAbilityContext, isDark ? '#FF000000' : '#FFF8FAFC');
+  }
+
+  requestMediaPermissions(): void {
+    try {
+      let atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager();
+      let context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+      atManager.requestPermissionsFromUser(context, ['ohos.permission.MICROPHONE', 'ohos.permission.CAMERA'])
+        .then((data) => {
+          console.info('Permission request result:' + JSON.stringify(data));
+        })
+        .catch((error: BusinessError) => {
+          console.error('Permission request failed, code:' + error.code + ', message:' + error.message);
+        });
+    } catch (e) {
+      console.error('requestMediaPermissions error', JSON.stringify(e));
+    }
+  }
+
+  checkIsMobileDevice(): boolean {
+    let deviceType: string = deviceInfo.deviceType;
+    return deviceType === 'phone' || deviceType === 'tablet';
+  }
+
+  onThemeChanged(): void {
+    let effectiveMode: ConfigurationConstant.ColorMode = this.currentColorMode;
+    if (effectiveMode === ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET) {
+      effectiveMode = ConfigurationConstant.ColorMode.COLOR_MODE_LIGHT;
+    }
+    let isDark: boolean = ThemeHelper.isEffectiveDarkMode(this.appTheme, effectiveMode);
+    this.webDarkMode = isDark ? WebDarkMode.On : WebDarkMode.Off;
+    this.webBgColor = isDark ? Color.Black : Color.White;
+    this.navBarColor = isDark ? Color.Black : $r('app.color.bg_primary');
+    ThemeHelper.setStatusBarColor(getContext(this) as common.UIAbilityContext, isDark ? '#FF000000' : '#FFF8FAFC');
+  }
+
+  loadDropdownTools(): void {
+    // Read current state from AppStorage
+    let hiddenStr: string = AppStorage.get<string>('hiddenTools') as string;
+    let hiddenTools: string[] = [];
+    if (hiddenStr && hiddenStr !== '[]') {
+      try {
+        hiddenTools = JSON.parse(hiddenStr);
+      } catch (e) {
+        hiddenTools = [];
+      }
+    }
+
+    let toolsOrderStr: string = AppStorage.get<string>('toolsOrder') as string;
+    let toolsOrder: Record<string, string[]> = {};
+    if (toolsOrderStr && toolsOrderStr !== '{}') {
+      try {
+        toolsOrder = JSON.parse(toolsOrderStr);
+      } catch (e) {
+        toolsOrder = {};
+      }
+    }
+
+    let customStr: string = AppStorage.get<string>('customTools') as string;
+    let customTools: CustomToolData[] = [];
+    if (customStr && customStr !== '[]') {
+      try {
+        customTools = JSON.parse(customStr);
+      } catch (e) {
+        customTools = [];
+      }
+    }
+
+    let applyOrder = (tools: DropdownTool[], order: string[]): DropdownTool[] => {
+      if (!order || order.length === 0) {
+        return tools;
+      }
+      let sorted: DropdownTool[] = [];
+      for (let id of order) {
+        for (let tool of tools) {
+          if (tool.id === id) {
+            sorted.push(tool);
+            break;
+          }
+        }
+      }
+      for (let tool of tools) {
+        let found: boolean = false;
+        for (let s of sorted) {
+          if (s.id === tool.id) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          sorted.push(tool);
+        }
+      }
+      return sorted;
+    };
+
+    let categories: DropdownCategory[] = [];
+
+    // AI tools
+    let aiTools: DropdownTool[] = [];
+    for (let tool of DEFAULT_AI_TOOLS) {
+      if (hiddenTools.indexOf(tool.id) === -1) {
+        aiTools.push({ id: tool.id, name: tool.name, url: tool.url });
+      }
+    }
+    for (let item of customTools) {
+      if (item.category === 'ai') {
+        aiTools.push({ id: item.id, name: item.name, url: item.url });
+      }
+    }
+    aiTools = applyOrder(aiTools, toolsOrder['ai']);
+    if (aiTools.length > 0) {
+      categories.push({ name: 'AIç½‘å€å¯¼èˆª', tools: aiTools });
+    }
+
+    // Search tools
+    let searchTools: DropdownTool[] = [];
+    for (let tool of DEFAULT_SEARCH_TOOLS) {
+      if (hiddenTools.indexOf(tool.id) === -1) {
+        searchTools.push({ id: tool.id, name: tool.name, url: tool.url });
+      }
+    }
+    for (let item of customTools) {
+      if (item.category === 'search') {
+        searchTools.push({ id: item.id, name: item.name, url: item.url });
+      }
+    }
+    searchTools = applyOrder(searchTools, toolsOrder['search']);
+    if (searchTools.length > 0) {
+      categories.push({ name: 'æœç´¢å¼•æ“', tools: searchTools });
+    }
+
+    // Saved tools
+    let savedTools: DropdownTool[] = [];
+    for (let item of customTools) {
+      if (item.category === 'saved') {
+        savedTools.push({ id: item.id, name: item.name, url: item.url });
+      }
+    }
+    savedTools = applyOrder(savedTools, toolsOrder['saved']);
+    if (savedTools.length > 0) {
+      categories.push({ name: 'æˆ‘çš„ä¿å­˜', tools: savedTools });
+    }
+
+    this.dropdownCategories = categories;
+  }
+
+  setMobileUserAgent(): void {
+    if (this.isMobileDevice) {
+      try {
+        let mobileUA: string = 'Mozilla/5.0 (Linux; Android 12; HarmonyOS) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.230 Mobile Safari/537.36';
+        this.controller.setCustomUserAgent(mobileUA);
+      } catch (e) {
+        console.error('setCustomUserAgent error', JSON.stringify(e));
+      }
+    }
+  }
+
+  closeWebPage(): void {
+    router.back();
+  }
+
+  goBack(): void {
+    if (this.controller.accessStep(-1)) {
+      this.controller.backward();
+      this.canGoBack = this.controller.accessStep(-1);
+      this.canGoForward = this.controller.accessStep(1);
+    }
+  }
+
+  goForward(): void {
+    if (this.controller.accessStep(1)) {
+      this.controller.forward();
+      this.canGoBack = this.controller.accessStep(-1);
+      this.canGoForward = this.controller.accessStep(1);
+    }
+  }
+
+  refreshPage(): void {
+    this.controller.refresh();
+  }
+
+  switchToTool(url: string, name: string): void {
+    this.showDropdown = false;
+    if (url === this.currentUrl) {
+      return;
+    }
+    this.pageTitle = name;
+    this.currentUrl = url;
+    this.isLoading = true;
+    this.controller.loadUrl(url);
+  }
+
+  getAllDropdownTools(): DropdownTool[] {
+    let allTools: DropdownTool[] = [];
+    for (let category of this.dropdownCategories) {
+      for (let tool of category.tools) {
+        allTools.push(tool);
+      }
+    }
+    return allTools;
+  }
+
+  prefetchTools(urls: string[]): void {
+    for (let url of urls) {
+      try {
+        this.controller.prefetchPage(url);
+      } catch (e) {
+        console.error('prefetchPage error', url, JSON.stringify(e));
+      }
+    }
+  }
+
+  prefetchNextTools(count: number): void {
+    let allTools: DropdownTool[] = this.getAllDropdownTools();
+    if (allTools.length === 0) {
+      return;
+    }
+
+    let currentIndex: number = -1;
+    for (let i = 0; i < allTools.length; i++) {
+      if (allTools[i].url === this.currentUrl) {
+        currentIndex = i;
+        break;
+      }
+    }
+
+    let urls: string[] = [];
+    for (let i = 1; i <= count; i++) {
+      let idx: number = currentIndex >= 0 ? (currentIndex + i) % allTools.length : i - 1;
+      let tool: DropdownTool = allTools[idx];
+      if (tool && tool.url !== this.currentUrl) {
+        let exists: boolean = false;
+        for (let u of urls) {
+          if (u === tool.url) {
+            exists = true;
+            break;
+          }
+        }
+        if (!exists) {
+          urls.push(tool.url);
+        }
+      }
+    }
+    this.prefetchTools(urls);
+  }
+
+  prefetchDropdownTools(): void {
+    let allTools: DropdownTool[] = this.getAllDropdownTools();
+    let urls: string[] = [];
+    let limit: number = 5;
+    let added: number = 0;
+    for (let tool of allTools) {
+      if (tool.url !== this.currentUrl) {
+        urls.push(tool.url);
+        added++;
+        if (added >= limit) {
+          break;
+        }
+      }
+    }
+    this.prefetchTools(urls);
+  }
+
+  aboutToDisappear(): void {
+    try {
+      webview.WebCookieManager.saveCookieAsync();
+    } catch (e) {
+      console.error('saveCookieAsync error', JSON.stringify(e));
+    }
+  }
+
+  build() {
+    Column() {
+      // Top Navigation Bar
+      Row() {
+        // Back button
+        Button() {
+          SymbolGlyph($r('sys.symbol.arrow_left'))
+            .fontSize(17)
+            .fontColor([this.canGoBack ? $r('app.color.text_primary') : $r('app.color.disabled_color')])
+        }
+        .width(28)
+        .height(28)
+        .backgroundColor(Color.Transparent)
+        .borderRadius(14)
+        .enabled(this.canGoBack)
+        .onClick(() => {
+          this.goBack();
+        })
+        .margin({ left: 4 })
+
+        // Forward button
+        Button() {
+          SymbolGlyph($r('sys.symbol.arrow_right'))
+            .fontSize(17)
+            .fontColor([this.canGoForward ? $r('app.color.text_primary') : $r('app.color.disabled_color')])
+        }
+        .width(28)
+        .height(28)
+        .backgroundColor(Color.Transparent)
+        .borderRadius(14)
+        .enabled(this.canGoForward)
+        .onClick(() => {
+          this.goForward();
+        })
+        .margin({ left: 4 })
+
+        // Title + Dropdown button
+        Column() {
+          Text(this.pageTitle)
+            .fontSize(14)
+            .fontWeight(FontWeight.Medium)
+            .fontColor($r('app.color.text_primary'))
+            .maxLines(1)
+            .textOverflow({ overflow: TextOverflow.Ellipsis })
+        }
+        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Center)
+        .margin({ left: 8, right: 8 })
+
+        // Quick switch button
+        Button() {
+          SymbolGlyph(this.showDropdown ? $r('sys.symbol.chevron_up') : $r('sys.symbol.chevron_down'))
+            .fontSize(17)
+            .fontColor([$r('app.color.text_secondary')])
+        }
+        .width(28)
+        .height(28)
+        .backgroundColor(Color.Transparent)
+        .borderRadius(14)
+        .onClick(() => {
+          this.showDropdown = !this.showDropdown;
+          if (this.showDropdown) {
+            this.loadDropdownTools();
+            this.prefetchDropdownTools();
+          }
+        })
+
+        // Refresh button
+        Button() {
+          SymbolGlyph($r('sys.symbol.arrow_clockwise'))
+            .fontSize(17)
+            .fontColor([$r('app.color.text_primary')])
+        }
+        .width(28)
+        .height(28)
+        .backgroundColor(Color.Transparent)
+        .borderRadius(14)
+        .onClick(() => {
+          this.refreshPage();
+        })
+        .margin({ left: 4 })
+      }
+      .width('100%')
+      .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+      .backgroundColor(this.navBarColor)
+      .border({ width: { bottom: 1 }, color: $r('app.color.border_color') })
+
+      // Dropdown Menu
+      if (this.showDropdown) {
+        Column() {
+          Scroll() {
+            Column() {
+              ForEach(this.dropdownCategories, (category: DropdownCategory) => {
+                // Category title
+                Text(category.name)
+                  .fontSize(12)
+                  .fontWeight(FontWeight.Bold)
+                  .fontColor($r('app.color.text_secondary'))
+                  .width('100%')
+                  .padding({ left: 16, top: 10, bottom: 4 })
+
+                // Tools in category
+                ForEach(category.tools, (tool: DropdownTool) => {
+                  Row() {
+                    Text(tool.name)
+            .fontSize(14)
+                      .fontColor(tool.url === this.currentUrl ? ThemeHelper.getAccentColor() : $r('app.color.text_primary'))
+                      .fontWeight(tool.url === this.currentUrl ? FontWeight.Medium : FontWeight.Regular)
+
+                    Blank()
+
+                    if (tool.url === this.currentUrl) {
+                      Text('å½“å‰')
+                        .fontSize(11)
+                        .fontColor(ThemeHelper.getAccentColor())
+                        .backgroundColor(ThemeHelper.getAccentLightColor())
+                        .borderRadius(8)
+.padding({ left: 8, right: 8, top: 4, bottom: 4 })
+                    }
+                  }
+                  .width('100%')
+                  .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+                  .borderRadius(8)
+                  .backgroundColor(tool.url === this.currentUrl ?
+                    ThemeHelper.getAccentLightColor() : $r('app.color.bg_card'))
+                  .onClick(() => {
+                    this.switchToTool(tool.url, tool.name);
+                  })
+                }, (tool: DropdownTool) => tool.id)
+              }, (category: DropdownCategory) => category.name)
+            }
+            .width('100%')
+            .padding({ bottom: 8 })
+          }
+          .layoutWeight(1)
+          .width('100%')
+        }
+        .width('100%')
+        .height(300)
+        .backgroundColor($r('app.color.bg_card'))
+        .borderRadius({ bottomLeft: 12, bottomRight: 12 })
+        .shadow({ radius: 8, color: 'rgba(0,0,0,0.1)', offsetY: 4 })
+        .position({ x: 0, y: 0 })
+        .zIndex(10)
+      }
+
+      // WebView Container
+      Stack() {
+        Web({ src: this.currentUrl, controller: this.controller })
+          .layoutWeight(1)
+          .width('100%')
+          .domStorageAccess(true)
+          .javaScriptAccess(true)
+          .onlineImageAccess(true)
+          .imageAccess(true)
+          .fileAccess(true)
+          .databaseAccess(true)
+          .mixedMode(MixedMode.All)
+          .horizontalScrollBarAccess(false)
+          .verticalScrollBarAccess(false)
+          .backgroundColor(this.webBgColor)
+          .darkMode(this.webDarkMode)
+          .forceDarkAccess(this.webDarkMode === WebDarkMode.On)
+          .margin({ bottom: -this.bottomSafeArea })
+          .onClick(() => {
+            if (this.showDropdown) {
+              this.showDropdown = false;
+            }
+          })
+          .onControllerAttached(() => {
+            this.setMobileUserAgent();
+          })
+          .onPermissionRequest((event) => {
+            if (event) {
+              event.request.grant(event.request.getAccessibleResource());
+            }
+          })
+          .onPageBegin((event) => {
+            if (event) {
+              this.isLoading = true;
+            }
+          })
+          .onPageEnd(() => {
+            this.isLoading = false;
+            this.canGoBack = this.controller.accessStep(-1);
+            this.canGoForward = this.controller.accessStep(1);
+            this.prefetchNextTools(3);
+          })
+          .onErrorReceive((event) => {
+            if (event) {
+              this.isLoading = false;
+            }
+          })
+          .onRenderExited(() => {
+            this.controller.loadUrl(this.currentUrl);
+          })
+      }
+      .layoutWeight(1)
+      .width('100%')
+    }
+    .width('100%')
+    .height('100%')
+    .backgroundColor($r('app.color.bg_primary'))
+  }
+}
+ÀÔrC˜±@ohos.web.webview¬@ohos.router¬@ohos.window°@ohos.deviceInfo·@ohos.abilityAccessCtrlÙ'@ohos.app.ability.ConfigurationConstant±../model/ToolDataµ../common/ThemeHelperÔrD—ªassertions¨external¢id¤meta±moduleSideEffectsªresolvedByµsyntheticNamedExportsAÃÙk hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.web.webview.d.tsAÃªoh-resolveÂDAÃÙf hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.router.d.tsÔrE‘¯hostModulesInfo‘ÔrF’²hostDependencyName®hostModuleName¬@ohos.router¥entryÃªoh-resolveÂDAÃÙf hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.window.d.tsE‘F¬@ohos.window¥entryÃªoh-resolveÂDAÃÙj hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.deviceInfo.d.tsE‘F°@ohos.deviceInfo¥entryÃªoh-resolveÂDAÃÙq hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.abilityAccessCtrl.d.tsE‘F·@ohos.abilityAccessCtrl¥entryÃªoh-resolveÂDAÃÙ hvigor_ignore_C:_Program Files_Huawei_DevEco Studio_sdk_default_openharmony_ets_api_@ohos.app.ability.ConfigurationConstant.d.tsAÃªoh-resolveÂDAÂÙnC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entry\src\main\ets\model\ToolData.etsAÃªoh-resolveÂDAÂÙrC:\Users\a1519\Documents\AItransformer_arkts_version\aitransformer_arkts\entry\src\main\ets\common\ThemeHelper.etsAÃªoh-resolveÂ“ÔrG–§version¤fileªsourceRoot§sources¥names¨mappingsªWebPage.js ‘«WebPage.etsÜ –”    ”  	”  ”  ”'  %”(  &–”   ” 	” ” ”! +”" ,–”   ” ” ” ”! +”" ,–”   ” 	” ” ”) 2”* 3–”   ” 	” ” ÌA”7 ÌR”8 ÌS–”   ” $” 9”" ÌA”ÌK ÌR”ÌL ÌSš”   ” ”	 	” ” ”/ /”1 ÌA”7 ÌG”ÌJ ÌZ”ÌK Ì[˜”   ” ”	 	” ” ” ”3 3”4 4’” ” ‘”  ’”9 ”;  ’”8 ”: ’”8 ”< "’”8 ”= #’”; !”Ì@ &’”; !”Ì@ &’”= "”> #””1 ”; ”= ÌG”ÌE ÌO˜”9 ”ÌK !”ÌM ”Ìb ”Ìc ”Ìl #”Ìm $”Ì} 4””:  $”ÌE  /”ÌF  0”ÌI  3””9 !%”> !*”? !+”ÌD !0–” $2” $6”% $=”& $>”7 $ÌO”9 $ÌQ’” %$”# %)’”" &3”$ &5‘” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 4” <’” 4” <’” <” ÌL’” <” ÌL’”  	”  ’”  	”  ’” !	” !’” !	” !’” "	” "’” "	” "”” (”	 (”
+ (” (š” )” )” )	” )” )”" )”# )”6 )2”8 )4”9 )5–” *” *” *	” *”  *”! *™” ,” ,” ,” ,)” ,/” ,0”% ,9”' ,ÌU”( ,ÌV”” -” -” -” -™” .” .
+” .” .”! .#”" .$”' .)”( .*”) .+™” /” /
+” /” /”# /%”$ /&”+ /-”, /.”- //”” 0” 0
+” 0” 0—” 1” 1” 1” 1”" 1”* 1"”+ 1#‘” 2”” 3” 3
+” 3” 3—” 4” 4” 4” 4”! 4”+ 4#”, 4$‘” 5‘”	 6–” 7” 7” 7	” 7” 7” 7–” 8” 8” 8	”$ 8 ”& 8"”' 8#’” :”ÌF :ÌB–” ;” ;” ;” ;” ;” ;’” <” <
+Ü ” =” =” =”) =!”* ="”< =4”= =5”ÌA =9”ÌB =:”ÌL =ÌD”ÌN =ÌF”ÌR =ÌJ”ÌT =ÌL”ÌU =ÌM”ÌV =ÌN”ÌW =ÌO‘” >”” >” >” >” >Ü ” ?” ?” ?” ?” ?”8 ?0”: ?2”> ?6”? ?7”ÌI ?ÌA”ÌK ?ÌC”ÌO ?ÌG”ÌP ?ÌH”ÌY ?ÌQ”ÌZ ?ÌR”Ì[ ?ÌS”Ì\ ?ÌT”Ì] ?ÌU”Ì^ ?ÌV‘” Ì@‘”	 ÌA’” ÌC”% ÌC!’” ÌD” ÌDŸ” ÌE” ÌE
+” ÌE” ÌE&”# ÌE,”) ÌE2”* ÌE3”7 ÌEÌ@”8 ÌEÌA”ÌB ÌEÌK”ÌC ÌEÌL”ÌG ÌEÌP”ÌH ÌEÌl”ÌI ÌEÌm”ÌJ ÌEÌnŸ” ÌF” ÌF
+” ÌF” ÌF(”& ÌF2”' ÌF3”9 ÌFÌE”: ÌFÌF”Ì@ ÌFÌL”ÌA ÌFÌM”ÌN ÌFÌZ”ÌO ÌFÌ[”Ìh ÌFÌt”Ìi ÌFÌu”Ìj ÌFÌv” ÌG” ÌG
+” ÌG” ÌG”" ÌG”' ÌG!”( ÌG"”1 ÌG+”2 ÌG,”< ÌG6”= ÌG7”ÌC ÌG=”ÌD ÌG>”ÌE ÌG?‘”	 ÌH”” ÌH” ÌH” ÌH” ÌHŸ” ÌI” ÌI” ÌI” ÌI” ÌI”4 ÌI.”6 ÌI0”: ÌI4”; ÌI5”ÌD ÌI>”ÌE ÌI?”ÌF ÌIÌ@”ÌG ÌIÌA”ÌH ÌIÌB”ÌI ÌIÌC‘”	 ÌJ’” ÌL” ÌL˜” ÌM” ÌM” ÌM” ÌM9”  ÌM=”! ÌM>”1 ÌMÌN”2 ÌMÌOš” ÌN” ÌN” ÌN” ÌN”3 ÌN/”4 ÌN0”= ÌN9”> ÌN:”ÌP ÌNÌL”ÌR ÌNÌN™” ÌO” ÌO” ÌO”1 ÌO+”2 ÌO,”; ÌO5”< ÌO6”ÌL ÌOÌF”ÌM ÌOÌG‘”	 ÌPŸ” ÌQ” ÌQ” ÌQ” ÌQ”  ÌQ%”! ÌQ&”4 ÌQ9”5 ÌQ:”9 ÌQ>”: ÌQ?”ÌB ÌQÌG”ÌD ÌQÌI”ÌQ ÌQÌV”ÌR ÌQÌW”ÌS ÌQÌXÜ ” ÌR” ÌR” ÌR”% ÌR!”& ÌR"”0 ÌR,”1 ÌR-”5 ÌR1”6 ÌRÌM”8 ÌRÌO”> ÌRÌU”? ÌRÌV”Ì@ ÌRÌW”ÌA ÌRÌX”ÌL ÌRÌc”ÌM ÌRÌd”ÌN ÌRÌe”ÌO ÌRÌf”ÌZ ÌRÌq”Ì[ ÌRÌr”Ì\ ÌRÌs’” ÌS” ÌS’” ÌU” ÌU’” ÌV” ÌV™” ÌW” ÌW
+” ÌW” ÌW3”- ÌWÌD”. ÌWÌE”= ÌWÌT”? ÌWÌV”Ì@ ÌWÌW™” ÌX” ÌX
+” ÌX” ÌX-”$ ÌX7”% ÌX8”) ÌX<”* ÌXÌX”+ ÌXÌY” ÌY” ÌY” ÌY”0 ÌY*”1 ÌY+”8 ÌY2”: ÌY4”; ÌY5”ÌW ÌYÌQ”ÌY ÌYÌS”Ìq ÌYÌk”Ìr ÌYÌl”Ìs ÌYÌm—” ÌZ	” ÌZ” ÌZ” ÌZ” ÌZ” ÌZ” ÌZŸ” Ì[
+” Ì[” Ì[” Ì[” Ì[”9 Ì[3”< Ì[6”Ì@ Ì[:”ÌA Ì[;”ÌJ Ì[ÌD”ÌK Ì[ÌE”ÌO Ì[ÌI”ÌP Ì[ÌJ”ÌQ Ì[ÌK”ÌR Ì[ÌL“” Ì\” Ì\	” Ì\
+—” Ì]	” Ì]” Ì]” Ì]” Ì]$” Ì]&”! Ì](Ü ” Ì^
+” Ì^” Ì^” Ì^” Ì^”Ì@ Ì^:”ÌC Ì^=”ÌH Ì^ÌB”ÌI Ì^ÌC”ÌM Ì^ÌG”ÌP Ì^ÌJ”Ì\ Ì^ÌV”Ì_ Ì^ÌY”Ìd Ì^Ì^”Ìe Ì^Ì_”Ìl Ì^Ìf”Ìm Ì^Ìg”Ìn Ì^Ìh”” Ì_” Ì_	” Ì_
+” Ì_‘”	 Ì`”” Ì`” Ì`” Ì`” Ì`Ÿ” Ìa” Ìa” Ìa” Ìa” Ìa”9 Ìa3”; Ìa5”? Ìa9”Ì@ Ìa:”ÌI ÌaÌC”ÌJ ÌaÌD”ÌK ÌaÌE”ÌL ÌaÌF”ÌM ÌaÌG”ÌN ÌaÌH‘”	 Ìb’” Ìc” Ìc’” Ìe” Ìe˜” Ìf” Ìf” Ìf” Ìf”# Ìf'”$ Ìf(”. Ìf2”/ Ìf3š” Ìg” Ìg” Ìg” Ìg”% Ìg!”) Ìg%”3 Ìg/”8 Ìg4”Ì@ Ìg<”ÌA Ìg=’” Ìh” Ìh’” Ìj” Ìj˜” Ìk” Ìk” Ìk” Ìk9”  Ìk=”! Ìk>”1 ÌkÌN”2 ÌkÌOš” Ìl” Ìl” Ìl” Ìl”3 Ìl/”4 Ìl0”= Ìl9”> Ìl:”ÌP ÌlÌL”ÌR ÌlÌN™” Ìm” Ìm” Ìm”1 Ìm+”2 Ìm,”; Ìm5”< Ìm6”ÌL ÌmÌF”ÌM ÌmÌG‘”	 ÌnŸ” Ìo” Ìo” Ìo” Ìo”  Ìo%”! Ìo&”4 Ìo9”5 Ìo:”9 Ìo>”: Ìo?”ÌB ÌoÌG”ÌD ÌoÌI”ÌQ ÌoÌV”ÌR ÌoÌW”ÌS ÌoÌXÜ ” Ìp” Ìp” Ìp	” Ìp” Ìp”! Ìp”" Ìp”# Ìp”$ Ìp ”/ Ìp+”0 Ìp,”2 Ìp.”3 Ìp/”4 Ìp0”5 Ìp1”Ì@ Ìp<”ÌA Ìp=”ÌD ÌpÌ@”ÌE ÌpÌAÜ ” Ìq” Ìq” Ìq	” Ìq” Ìq”  Ìq”! Ìq”" Ìq”# Ìq”( Ìq$”) Ìq%”. Ìq*”/ Ìq+”0 Ìq,”1 Ìq-”6 Ìq2”7 Ìq3”< Ìq8”= Ìq9Ü ” Ìr” Ìr” Ìr	” Ìr” Ìr”! Ìr”" Ìr”# Ìr”$ Ìr ”) Ìr%”* Ìr&”/ Ìr+”0 Ìr,”1 Ìr-”Ì¢ ÌrÌH”Ì£ ÌrÌIÜ ” Ìs” Ìs” Ìs”% Ìs!”& Ìs"”0 Ìs,”1 Ìs-”5 Ìs1”6 ÌsÌM”8 ÌsÌO”> ÌsÌU”? ÌsÌV”Ì@ ÌsÌW”ÌA ÌsÌX”ÌL ÌsÌc”ÌM ÌsÌd”ÌN ÌsÌe”ÌO ÌsÌf”ÌZ ÌsÌq”Ì[ ÌsÌr”Ì\ ÌsÌs’” Ìt” Ìt’” Ìv” Ìv’” Ìw”- Ìw)›” Ìx” Ìx” Ìx” Ìx”" Ìx&”# Ìx'”& Ìx*”' Ìx3”4 ÌxÌ@”5 ÌxÌK”6 ÌxÌL–” Ìy” Ìy” Ìy” Ìy ” Ìy"” Ìy#˜” Ìz” Ìz” Ìz” Ìz”" Ìz”' Ìz#”+ Ìz'”- Ìz)’” Ì{” Ì{
+š” Ì|” Ì|” Ì|”" Ì|”# Ì|”( Ì| ”) Ì|!”2 Ì|*”3 Ì|+”4 Ì|,‘” Ì}”” Ì}” Ì}” Ì}” Ì}•” Ì~” Ì~” Ì~”  Ì~”! Ì~‘” Ì‘”	 Ì€›” Ì‚” Ì‚” Ì‚” Ì‚ ”& Ì‚*”' Ì‚+”* Ì‚.”+ Ì‚7”7 Ì‚ÌC”8 Ì‚ÌN”9 Ì‚ÌO–” Ìƒ” Ìƒ” Ìƒ” Ìƒ/” Ìƒ1” Ìƒ2˜” Ì„” Ì„” Ì„” Ì„”* Ì„&”/ Ì„+”3 Ì„/”5 Ì„1’” Ì…” Ì…
+š” Ì†” Ì†” Ì†”! Ì†”" Ì†”' Ì†”( Ì† ”5 Ì†-”6 Ì†.”7 Ì†/‘” Ì‡”” Ì‡” Ì‡” Ì‡” Ì‡•” Ìˆ” Ìˆ” Ìˆ” Ìˆ”  Ìˆ‘” Ì‰‘”	 ÌŠ›” ÌŒ” ÌŒ” ÌŒ” ÌŒ”" ÌŒ&”# ÌŒ'”& ÌŒ*”' ÌŒ3”4 ÌŒÌ@”5 ÌŒÌK”6 ÌŒÌL–” Ì” Ì” Ì” Ì(” Ì*” Ì+˜” Ì” Ì” Ì” Ì”" Ì”' Ì#”+ Ì'”- Ì)’” Ì” Ì
+š” Ì” Ì” Ì”" Ì”# Ì”( Ì ”) Ì!”2 Ì*”3 Ì+”4 Ì,‘” Ì‘”” Ì‘” Ì‘” Ì‘” Ì‘•” Ì’” Ì’” Ì’”  Ì’”! Ì’‘” Ì“‘”	 Ì”š” Ì–” Ì–” Ì–” Ì–” Ì–” Ì–+”! Ì–-”& Ì–<”( Ì–ÌN”* Ì–ÌP›” Ì—” Ì—
+” Ì—” Ì—” Ì—” Ì—”  Ì—”& Ì— ”+ Ì—%”, Ì—&”. Ì—(”” Ì˜” Ì˜” Ì˜” Ì˜‘” Ì™–” Ìš” Ìš
+” Ìš” Ìš#” Ìš%” Ìš&—” Ì›” Ì›” Ì›” Ì›” Ì›”  Ì›”" Ì›—” Ìœ” Ìœ” Ìœ” Ìœ”! Ìœ”& Ìœ”( Ìœ ˜” Ì
+” Ì” Ì” Ì” Ì”$ Ì”& Ì”( Ì˜” Ì” Ì” Ì”# Ì”$ Ì”( Ì”) Ì”* Ì’” ÌŸ” ÌŸ‘” Ì ‘” Ì¡	‘” Ì¢—” Ì£” Ì£” Ì£” Ì£” Ì£”" Ì£”$ Ì£–” Ì¤” Ì¤” Ì¤” Ì¤”! Ì¤"”" Ì¤#—” Ì¥” Ì¥” Ì¥” Ì¥” Ì¥”$ Ì¥”& Ì¥š” Ì¦
+” Ì¦” Ì¦” Ì¦” Ì¦”! Ì¦”% Ì¦”& Ì¦”( Ì¦”* Ì¦ •” Ì§” Ì§”  Ì§”$ Ì§”% Ì§’” Ì¨” Ì¨‘” Ì©‘” Ìª	•” Ì«” Ì«” Ì«” Ì«” Ì«˜” Ì¬
+” Ì¬” Ì¬” Ì¬”  Ì¬”$ Ì¬”% Ì¬”& Ì¬‘” Ì­	‘” Ì®”” Ì¯” Ì¯” Ì¯” Ì¯“” Ì°”	 Ì°”
+ Ì°–” Ì²” Ì²” Ì²” Ì²)” Ì²+” Ì²,’” Ì´” Ì´–” Ìµ” Ìµ” Ìµ” Ìµ"” Ìµ$” Ìµ%—” Ì¶” Ì¶	” Ì¶” Ì¶” Ì¶”) Ì¶%”+ Ì¶'” Ì·” Ì·
+” Ì·” Ì·”# Ì·”$ Ì·”( Ì·"”) Ì·#”+ Ì·%”, Ì·&”1 Ì·+”2 Ì·,”3 Ì·-”5 Ì·/Ü ” Ì¸” Ì¸” Ì¸” Ì¸” Ì¸” Ì¸”! Ì¸”# Ì¸”' Ì¸”( Ì¸ ”* Ì¸"”, Ì¸$”0 Ì¸(”2 Ì¸*”6 Ì¸.”7 Ì¸/”; Ì¸3”= Ì¸5”Ì@ Ì¸8”ÌB Ì¸:”ÌF Ì¸>”ÌG Ì¸?”ÌJ Ì¸ÌB”ÌL Ì¸ÌD”ÌM Ì¸ÌE”ÌN Ì¸ÌF‘” Ì¹‘”	 Ìº—” Ì»” Ì»	” Ì»” Ì»” Ì»”$ Ì» ”& Ì»"˜” Ì¼” Ì¼
+” Ì¼” Ì¼” Ì¼”" Ì¼”& Ì¼ ”( Ì¼"Ü ” Ì½” Ì½” Ì½” Ì½” Ì½” Ì½”! Ì½”# Ì½”' Ì½”( Ì½ ”* Ì½"”, Ì½$”0 Ì½(”2 Ì½*”6 Ì½.”7 Ì½/”; Ì½3”= Ì½5”Ì@ Ì½8”ÌB Ì½:”ÌF Ì½>”ÌG Ì½?”ÌJ Ì½ÌB”ÌL Ì½ÌD”ÌM Ì½ÌE”ÌN Ì½ÌF‘” Ì¾‘”	 Ì¿” ÌÀ” ÌÀ” ÌÀ” ÌÀ” ÌÀ”$ ÌÀ ”& ÌÀ"”0 ÌÀ,”1 ÌÀ-”5 ÌÀ1”6 ÌÀ2”7 ÌÀ3”8 ÌÀ4˜” ÌÁ” ÌÁ” ÌÁ” ÌÁ” ÌÁ” ÌÁ” ÌÁ”  ÌÁÜ ” ÌÂ” ÌÂ” ÌÂ” ÌÂ” ÌÂ” ÌÂ”" ÌÂ”$ ÌÂ”, ÌÂ&”. ÌÂ(”3 ÌÂ-”5 ÌÂ/”< ÌÂ6”> ÌÂ8”? ÌÂ9”Ì@ ÌÂ:‘”	 ÌÃ’” ÌÅ” ÌÅ–” ÌÆ” ÌÆ” ÌÆ” ÌÆ&” ÌÆ(” ÌÆ)—” ÌÇ” ÌÇ	” ÌÇ” ÌÇ” ÌÇ”- ÌÇ)”/ ÌÇ+” ÌÈ” ÌÈ
+” ÌÈ” ÌÈ”# ÌÈ”$ ÌÈ”( ÌÈ"”) ÌÈ#”+ ÌÈ%”, ÌÈ&”1 ÌÈ+”2 ÌÈ,”3 ÌÈ-”5 ÌÈ/Ü ” ÌÉ” ÌÉ” ÌÉ”  ÌÉ”! ÌÉ”# ÌÉ”% ÌÉ”' ÌÉ”+ ÌÉ#”, ÌÉ$”. ÌÉ&”0 ÌÉ(”4 ÌÉ,”6 ÌÉ.”: ÌÉ2”; ÌÉ3”? ÌÉ7”ÌA ÌÉ9”ÌD ÌÉ<”ÌF ÌÉ>”ÌJ ÌÉÌB”ÌK ÌÉÌC”ÌN ÌÉÌF”ÌP ÌÉÌH”ÌQ ÌÉÌI”ÌR ÌÉÌJ‘” ÌÊ‘”	 ÌË—” ÌÌ” ÌÌ	” ÌÌ” ÌÌ” ÌÌ”$ ÌÌ ”& ÌÌ"˜” ÌÍ” ÌÍ
+” ÌÍ” ÌÍ” ÌÍ”" ÌÍ”* ÌÍ$”, ÌÍ&Ü ” ÌÎ” ÌÎ” ÌÎ”  ÌÎ”! ÌÎ”# ÌÎ”% ÌÎ”' ÌÎ”+ ÌÎ#”, ÌÎ$”. ÌÎ&”0 ÌÎ(”4 ÌÎ,”6 ÌÎ.”: ÌÎ2”; ÌÎ3”? ÌÎ7”ÌA ÌÎ9”ÌD ÌÎ<”ÌF ÌÎ>”ÌJ ÌÎÌB”ÌK ÌÎÌC”ÌN ÌÎÌF”ÌP ÌÎÌH”ÌQ ÌÎÌI”ÌR ÌÎÌJ‘” ÌÏ‘”	 ÌĞ” ÌÑ” ÌÑ” ÌÑ”  ÌÑ”! ÌÑ”, ÌÑ(”. ÌÑ*”8 ÌÑ4”9 ÌÑ5”ÌA ÌÑ=”ÌB ÌÑ>”ÌC ÌÑ?”ÌD ÌÑÌ@˜” ÌÒ” ÌÒ” ÌÒ” ÌÒ” ÌÒ”! ÌÒ”" ÌÒ”$ ÌÒ Ü ” ÌÓ” ÌÓ” ÌÓ” ÌÓ” ÌÓ” ÌÓ”" ÌÓ”$ ÌÓ”* ÌÓ$”, ÌÓ&”1 ÌÓ+”3 ÌÓ-”> ÌÓ8”Ì@ ÌÓ:”ÌA ÌÓ;”ÌB ÌÓ<‘”	 ÌÔ’” ÌÖ” ÌÖ–” Ì×” Ì×” Ì×” Ì×%” Ì×'” Ì×(—” ÌØ” ÌØ	” ÌØ” ÌØ” ÌØ”$ ÌØ ”& ÌØ"˜” ÌÙ” ÌÙ
+” ÌÙ” ÌÙ” ÌÙ”" ÌÙ”) ÌÙ#”+ ÌÙ%Ü ” ÌÚ” ÌÚ” ÌÚ” ÌÚ”  ÌÚ”" ÌÚ”$ ÌÚ”& ÌÚ”* ÌÚ"”+ ÌÚ#”- ÌÚ%”/ ÌÚ'”3 ÌÚ+”5 ÌÚ-”9 ÌÚ1”: ÌÚ2”> ÌÚ6”Ì@ ÌÚ8”ÌC ÌÚ;”ÌE ÌÚ=”ÌI ÌÚÌA”ÌJ ÌÚÌB”ÌM ÌÚÌE”ÌO ÌÚÌG”ÌP ÌÚÌH”ÌQ ÌÚÌI‘” ÌÛ‘”	 ÌÜ” Ìİ” Ìİ” Ìİ” Ìİ”  Ìİ”* Ìİ&”, Ìİ(”6 Ìİ2”7 Ìİ3”> Ìİ:”? Ìİ;”Ì@ Ìİ<”ÌA Ìİ=˜” ÌŞ” ÌŞ” ÌŞ” ÌŞ” ÌŞ”  ÌŞ”! ÌŞ”# ÌŞÜ ” Ìß” Ìß” Ìß” Ìß” Ìß” Ìß”" Ìß”$ Ìß”* Ìß$”, Ìß&”1 Ìß+”3 Ìß-”= Ìß7”? Ìß9”Ì@ Ìß:”ÌA Ìß;‘”	 Ìà—” Ìâ” Ìâ” Ìâ	” Ìâ”" Ìâ”, Ìâ(”- Ìâ)’” Ìã” Ìã’” Ìå” Ìå–” Ìæ” Ìæ” Ìæ” Ìæ” Ìæ”! Ìæ’” Ìç” Ìç
+–” Ìè” Ìè” Ìè” Ìè”Ì ÌèÌ”Ì ÌèÌš” Ìé” Ìé” Ìé” Ìé”  Ìé”2 Ìé*”3 Ìé+”; Ìé3”< Ìé4”= Ìé5‘” Ìê”” Ìê” Ìê” Ìê” ÌêŸ” Ìë” Ìë” Ìë” Ìë” Ìë”8 Ìë0”: Ìë2”> Ìë6”? Ìë7”ÌH ÌëÌ@”ÌI ÌëÌA”ÌJ ÌëÌB”ÌK ÌëÌC”ÌL ÌëÌD”ÌM ÌëÌE‘” Ìì‘”	 Ìí’” Ìî” Ìî’” Ìğ” Ìğ–” Ìñ” Ìñ
+” Ìñ” Ìñ” Ìñ” Ìñ’” Ìò” Ìò’” Ìô”
+ Ìôœ” Ìõ” Ìõ” Ìõ” Ìõ” Ìõ” Ìõ”& Ìõ"”' Ìõ#”( Ìõ$”) Ìõ%”* Ìõ&”, Ìõ(˜” Ìö” Ìö
+” Ìö” Ìö” Ìö”$ Ìö”& Ìö ”' Ìö!Ÿ” Ì÷” Ì÷
+” Ì÷” Ì÷” Ì÷”! Ì÷”" Ì÷”, Ì÷&”- Ì÷'”7 Ì÷1”8 Ì÷2”9 Ì÷3”: Ì÷4”; Ì÷5”< Ì÷6” Ìø” Ìø
+” Ìø” Ìø”  Ìø”$ Ìø”% Ìø”/ Ìø)”0 Ìø*”: Ìø4”; Ìø5”< Ìø6”= Ìø7”> Ìø8‘”	 Ìù’” Ìú” Ìú’” Ìü” Ìü›” Ìı” Ìı” Ìı” Ìı” Ìı” Ìı”& Ìı"”' Ìı#”( Ìı$”) Ìı%”+ Ìı'˜” Ìş” Ìş
+” Ìş” Ìş” Ìş”# Ìş”% Ìş”& Ìş Ÿ” Ìÿ” Ìÿ
+” Ìÿ” Ìÿ” Ìÿ”! Ìÿ”" Ìÿ”, Ìÿ&”- Ìÿ'”7 Ìÿ1”8 Ìÿ2”9 Ìÿ3”: Ìÿ4”; Ìÿ5”< Ìÿ6” Í ” Í 
+” Í ” Í ”  Í ”$ Í ”% Í ”/ Í )”0 Í *”: Í 4”; Í 5”< Í 6”= Í 7”> Í 8‘”	 Í’” Í” Í’” Í” Í˜” Í” Í” Í	” Í” Í” Í”! Í”" Í’” Í” Í–” Í” Í” Í” Í” Í” Í(—” Í	” Í	” Í		” Í	” Í	”! Í	”" Í	˜” Í
+” Í
+” Í
+” Í
+” Í
+” Í
+”# Í
+”% Í
+!’” Í” Í‘”	 Í—” Í” Í” Í	” Í” Í” Í” Í—” Í” Í” Í	” Í” Í” Í” Í—” Í” Í” Í	” Í” Í” Í” Íš” Í” Í” Í	” Í” Í” Í”  Í”# Í”$ Í ”% Í!’” Í” Í’” Í” Í–” Í” Í” Í” Í#” Í%” Í&™” Í” Í	” Í” Í” Í”! Í”" Í”4 Í0”6 Í2™” Í” Í” Í” Í” Í”% Í”& Í ”+ Í%”- Í'˜” Í” Í” Í” Í” Í”" Í”# Í”$ Í‘” Í‘”	 Í”” Í” Í” Í” Í’” Í” Í”” Í” Í” Í” Í—” Í” Í	” Í” Í” Í” Í” Í’” Í” Í
+š” Í ” Í ” Í ” Í ”  Í ”, Í $”- Í %”0 Í (”1 Í )”2 Í *‘” Í!”” Í!” Í!” Í!” Í!Ü ” Í"” Í"” Í"” Í"” Í"”2 Í"*”4 Í",”7 Í"/”9 Í"1”= Í"5”> Í"6”ÌG Í"?”ÌH Í"Ì@”ÌI Í"ÌA”ÌJ Í"ÌB”ÌK Í"ÌC”ÌL Í"ÌD‘” Í#‘”	 Í$’” Í%” Í%”” Í'” Í'” Í'” Í'!™” Í(” Í(” Í(” Í(#” Í('” Í((”/ Í(;”1 Í(=”2 Í(>˜” Í)” Í)” Í)” Í)” Í)”  Í)”! Í)”# Í)’” Í*” Í*‘”	 Í+—” Í-” Í-” Í-” Í-” Í- ” Í-!” Í-"Ü ” Í.” Í.	” Í.” Í.” Í.” Í.” Í.” Í.” Í.”$ Í. ”% Í.!”+ Í.'”- Í.)”. Í.*”0 Í.,”2 Í..” Í/” Í/
+” Í/” Í/” Í/” Í/” Í/” Í/”$ Í/”( Í/"”) Í/#”3 Í/-”5 Í//•” Í0” Í0” Í0”  Í0”! Í0’” Í1” Í1‘” Í2‘”	 Í3–” Í5” Í5” Í5” Í5” Í5” Í5” Í6” Í6	” Í6” Í6” Í6” Í6” Í6” Í6” Í6”" Í6”$ Í6 ”% Í6!”' Í6#”) Í6%Ü ” Í7” Í7
+” Í7” Í7”" Í7$”& Í7(”' Í7)”( Í7*”) Í7+”* Í7,”+ Í7-”7 Í79”: Í7<”; Í7=”< Í7>”? Í7ÌA”ÌG Í7ÌI”ÌH Í7ÌJ”ÌN Í7ÌP”ÌO Í7ÌQ”ÌP Í7ÌR”ÌQ Í7ÌS”ÌR Í7ÌT”ÌU Í7ÌW”ÌV Í7ÌX”ÌW Í7ÌY™” Í8” Í8
+” Í8” Í8” Í8'”  Í8(”# Í8+”$ Í8,”% Í8-œ” Í9” Í9
+” Í9” Í9” Í9” Í9”  Í9”% Í9”) Í9#”* Í9$”4 Í9.”6 Í90–” Í:” Í:” Í:” Í:”" Í:#”# Í:$—” Í;” Í;” Í;” Í;” Í;”" Í;”$ Í;˜” Í<
+” Í<” Í<” Í<”" Í<”# Í<”& Í<”( Í<•” Í=” Í=”! Í=”% Í=”& Í=’” Í>” Í>‘” Í?‘” Í@	•” ÍA” ÍA” ÍA” ÍA” ÍAš” ÍB
+” ÍB” ÍB” ÍB” ÍB”" ÍB”# ÍB”& ÍB”' ÍB”( ÍB‘” ÍC	‘” ÍD‘”	 ÍE˜” ÍF” ÍF” ÍF	” ÍF” ÍF” ÍF”  ÍF”! ÍF’” ÍG” ÍG’” ÍI” ÍI™” ÍJ” ÍJ” ÍJ” ÍJ#” ÍJ'” ÍJ(”/ ÍJ;”1 ÍJ=”2 ÍJ>–” ÍK” ÍK” ÍK” ÍK” ÍK” ÍK–” ÍL” ÍL” ÍL” ÍL” ÍL” ÍL–” ÍM” ÍM” ÍM” ÍM” ÍM” ÍM—” ÍN” ÍN	” ÍN” ÍN” ÍN”! ÍN”# ÍNš” ÍO” ÍO
+” ÍO” ÍO” ÍO” ÍO”! ÍO”" ÍO”, ÍO&”. ÍO(š” ÍP” ÍP” ÍP” ÍP” ÍP” ÍP” ÍP”" ÍP”# ÍP”$ ÍP”” ÍQ” ÍQ” ÍQ” ÍQ–” ÍR” ÍR” ÍR” ÍR”" ÍR”$ ÍR’” ÍS
+” ÍS‘” ÍT	‘” ÍU‘”	 ÍV˜” ÍW” ÍW” ÍW	” ÍW” ÍW” ÍW”  ÍW”! ÍW’” ÍX” ÍX’” ÍZ” ÍZ’” Í[” Í[˜” Í\” Í\” Í\”$ Í\”% Í\”4 Í\.”6 Í\0”7 Í\1‘”	 Í]”” Í]” Í]” Í]” Í]Ÿ” Í^” Í^” Í^” Í^” Í^”1 Í^+”3 Í^-”7 Í^1”8 Í^2”ÌA Í^;”ÌB Í^<”ÌC Í^=”ÌD Í^>”ÌE Í^?”ÌF Í^Ì@‘”	 Í_’” Í`” Í`‘” Íb’” Íc” Íc
+–” Íc” Íc
+” Í*” Í*
+” Í*” Í*–” Íc” Íc
+” Í+” Í+” Í+”  Í+”” Íc” Íc
+” Í,”" Í,’” Íd”! Íd’” Íe” Íe	’” Íd”! Íd–” Íe” Íe	” Í´” Í´” Í´” Í´’” Íd”! ÍdÜ ” Íe” Íe	” Íµ” Íµ” Íµ” Íµ” Íµ”  Íµ”! Íµ”# Íµ”( Íµ”* Íµ!”+ Íµ"”- Íµ$”0 Íµ'”2 Íµ)”3 Íµ*”5 Íµ,”; Íµ2”= Íµ4”> Íµ5”Ì@ Íµ7’” Íd”! Íd˜” Íe” Íe	” Í¶” Í¶”< Í¶”Ì@ Í¶”ÌA Í¶”ÌL Í¶'’” Íd”! ÍdÜ ” Íe” Íe	” Í·” Í·” Í·” Í·” Í·”  Í·”" Í·”( Í·”* Í·!”+ Í·"”- Í·$”/ Í·&”4 Í·+”Ì¦ Í·ÌI”Ì¨ Í·ÌK’” Íf” Íf’” Íg” Íg’” Íf” Íf–” Íg” Íg” Íl	” Íl” Íl” Íl’” Íf” Íf–” Íg” Íg” Ím	” Ím” Ím” Ím’” Íf” Íf˜” Íg” Íg” Ín	”" Ín”# Ín”( Ín”) Ín”4 Ín*’” Íf” Íf–” Íg” Íg” Ío	” Ío”  Ío”" Ío’” Íf” Íf˜” Íg” Íg” Íp	” Íp” Íp” Íp”  Íp”) Íp’” Íf” Íf—” Íg” Íg” Íq	” Íq” Íq” Íq”  Íq–” Ír
+” Ír” Ír” Ír” Ír” Ír’” Ís” Ís	’” Íf” Ífš” Íg” Íg” Ít	” Ít” Ít” Ít”  Ít”" Ít”# Ít”% Ít’” Íh
+” Íh–” Íh
+” Íh” Íi”  Íi”! Íi”# ÍiŸ” Íh
+” Íh” Íj”! Íj”" Íj”# Íj”' Íj”( Íj”1 Íj&”2 Íj'”3 Íj(”Ì¥ ÍjÌF”Ì¦ ÍjÌG”Í ÍjÌf”Í ÍjÌg’” Íf” Íf’” Íg” Íg’” Ív” Ív’” Íw” Íw’” Ív” Ív–” Íw” Íw” Í|	” Í|” Í|” Í|’” Ív” Ív–” Íw” Íw” Í}	” Í}” Í}” Í}’” Ív” Ív˜” Íw” Íw” Í~	”" Í~”# Í~”( Í~”) Í~”4 Í~*’” Ív” Ív–” Íw” Íw” Í	” Í”  Í”" Í’” Ív” Ív˜” Íw” Íw” Í€	” Í€” Í€” Í€”  Í€”, Í€"’” Ív” Ív—” Íw” Íw” Í	” Í” Í” Í”  Í–” Í‚
+” Í‚” Í‚” Í‚”  Í‚”! Í‚’” Íƒ” Íƒ	’” Ív” Ívš” Íw” Íw” Í„	” Í„” Í„” Í„”  Í„”" Í„”# Í„”% Í„’” Íx
+” Íx–” Íx
+” Íx” Íy”  Íy”! Íy”# ÍyŸ” Íx
+” Íx” Íz”! Íz”" Íz”# Íz”' Íz”( Íz”4 Íz)”5 Íz*”6 Íz+”Ì¨ ÍzÌI”Ì© ÍzÌJ”Í ÍzÌi”Í ÍzÌj’” Ív” Ív’” Íw” Íw’” Í†”& Í†"’” Í‡” Í‡’” Í†”& Í†"–” Í‡” Í‡” Í	” Í”  Í”! Í’” Í†”& Í†"˜” Í‡” Í‡” Í	” Í” Í”- Í#”. Í$”4 Í*’” Í†”& Í†"” Í‡” Í‡” Í‘	” Í‘” Í‘” Í‘”  Í‘”" Í‘”# Í‘”% Í‘”* Í‘ ”, Í‘"”- Í‘#”/ Í‘%–” Íˆ
+” Íˆ” Íˆ” Íˆ” Íˆ”& Íˆ–” Íˆ
+” Íˆ” Í‰” Í‰” Í‰” Í‰˜” Íˆ
+” Íˆ” ÍŠ” ÍŠ” ÍŠ”& ÍŠ"”' ÍŠ#”- ÍŠ)”” Íˆ
+” Íˆ” Í‹” Í‹–” Íˆ
+” Íˆ” ÍŒ” ÍŒ” ÍŒ” ÍŒœ” Íˆ
+” Íˆ” Í” Í” Í”  Í”( Í$”* Í&”6 Í2”7 Í3”? Í;”ÌA Í=’” Íˆ
+” Íˆ’” Í†”" Í†"’” Í‡” Í‡’” Í“”" Í“’” Í”” Í”’” Í“”" Í“–” Í”” Í”” Í™	” Í™” Í™” Í™’” Í“”" Í“–” Í”” Í”” Íš	” Íš” Íš” Íš’” Í“”" Í“˜” Í”” Í”” Í›	”" Í›”# Í›”( Í›”) Í›”4 Í›*’” Í“”" Í“–” Í”” Í”” Íœ	” Íœ”  Íœ”" Íœ’” Í“”" Í“—” Í”” Í”” Í	” Í” Í” Í”  Íš” Í
+” Í” Í”! Í”$ Í”% Í”) Í#”* Í$”6 Í0”7 Í1–” ÍŸ
+” ÍŸ” ÍŸ” ÍŸ”% ÍŸ”' ÍŸ!–” Í ” Í ” Í ”* Í "”, Í $”- Í %–” Í¡” Í¡” Í¡”. Í¡&”0 Í¡(”1 Í¡)‘” Í¢’” Í£” Í£	›” Í•
+” Í•” Í•”# Í•”$ Í•”0 Í•'”1 Í•(”2 Í•)”Ì¥ Í•ÌF”Ì¦ Í•ÌG”Í Í•Ìe–” Í•
+” Í•” Í–”  Í–”! Í–”# Í––” Í•
+” Í•” Í—”! Í—”" Í—”Ì” Í—7’” Í“” Í“’” Í”” Í”’” Í¥” Í¥’” Í¦” Í¦’” Í¥” Í¥–” Í¦” Í¦” Í«	” Í«” Í«” Í«’” Í¥” Í¥–” Í¦” Í¦” Í¬	” Í¬” Í¬” Í¬’” Í¥” Í¥˜” Í¦” Í¦” Í­	”" Í­”# Í­”( Í­”) Í­”4 Í­*’” Í¥” Í¥–” Í¦” Í¦” Í®	” Í®”  Í®”" Í®’” Í¥” Í¥—” Í¦” Í¦” Í¯	” Í¯” Í¯” Í¯”  Í¯–” Í°
+” Í°” Í°”  Í°”" Í°”# Í°’” Í±” Í±	’” Í¥” Í¥š” Í¦” Í¦” Í²	” Í²” Í²” Í²”  Í²”" Í²”# Í²”% Í²’” Í§
+” Í§–” Í§
+” Í§” Í¨”  Í¨”! Í¨”# Í¨–” Í§
+” Í§” Í©”! Í©”" Í©”Ì” Í©5’” Í¥” Í¥’” Í¦” Í¦’” Íd” Íd’” Íe” Íe	’” Í¹” Í¹–” Íº” Íº
+” Íº” Íº”! Íº”# Íº’” Í»” Í»–” Í»” Í»” Íë	”$ Íë”% Íë”+ Íë–” Í»” Í»” Íì	”% Íì”& Íì”) Íì”” Í»” Í»” Íí	”. Íí” Í»” Í»” Íî	”+ Íî”, Íî”. Íî”8 Íî"”: Íî$”< Íî&”> Íî(”ÌI Íî3”ÌK Íî5”ÌM Íî7”ÌO Íî9Ü ” Í»” Í»” Íï	”% Íï”& Íï”( Íï”. Íï”0 Íï”1 Íï”3 Íï”8 Íï"”: Íï$”ÌK Íï5”ÌM Íï7”ÌT Íï>”ÌV ÍïÌ@”ÌW ÍïÌA”ÌY ÍïÌC” Í»” Í»” Íğ	”' Íğ”( Íğ”* Íğ”+ Íğ”- Íğ”. Íğ”0 Íğ”1 Íğ”3 Íğ”4 Íğ”6 Íğ –” Í»” Í»” Íñ	”% Íñ”& Íñ”( Íñ’” Í¼
+” Í¼–” Í¼
+” Í¼” Íè”+ Íè”, Íè”- Íè–” Í¼
+” Í¼” Íé”$ Íé”% Íé”+ Íé’” Í½” Í½–” Í½” Í½” Íå”$ Íå”% Íå”+ Íåš” Í½” Í½” Íæ”& Íæ”' Íæ”) Íæ”/ Íæ”1 Íæ”2 Íæ ”4 Íæ"’” Í¾” Í¾’”  Í¿”1 Í¿!–”  ÍÀ”$ ÍÀ”, ÍÀ”4 ÍÀ”5 ÍÀ”9 ÍÀ"’”  Í¿”1 Í¿!–”  ÍÀ”$ ÍÀ”% ÍÁ”- ÍÁ”. ÍÁ”0 ÍÁ’”  Í¿”1 Í¿!˜”  ÍÀ”$ ÍÀ”% ÍÂ”/ ÍÂ”0 ÍÂ”: ÍÂ(”; ÍÂ)”? ÍÂ-’”  Í¿”1 Í¿!””  ÍÀ”$ ÍÀ”% ÍÃ”. ÍÃ’”  Í¿”1 Í¿!–”  ÍÀ”$ ÍÀ”% ÍÄ”* ÍÄ”+ ÍÄ”1 ÍÄ’”  Í¿”1 Í¿!Ü ”  ÍÀ”$ ÍÀ”% ÍÅ”, ÍÅ”- ÍÅ”/ ÍÅ”3 ÍÅ!”5 ÍÅ#”7 ÍÅ%”9 ÍÅ'”< ÍÅ*”> ÍÅ,”Ì@ ÍÅ.”ÌB ÍÅ0”ÌH ÍÅ6”ÌJ ÍÅ8”ÌK ÍÅ9”ÌM ÍÅ;’” Í¿”- Í¿!’” ÍÀ”  ÍÀ’”  ÍÇ”4 ÍÇ$’”  ÍÈ”' ÍÈ’”( ÍÉ”+ ÍÉ–”( ÍÉ”+ ÍÉ”, ÍÚ”1 ÍÚ”2 ÍÚ”8 ÍÚÜ ”( ÍÉ”+ ÍÉ”, ÍÛ”3 ÍÛ”4 ÍÛ”6 ÍÛ”: ÍÛ!”< ÍÛ#”> ÍÛ%”Ì@ ÍÛ'”ÌE ÍÛ,”ÌG ÍÛ.”ÌI ÍÛ0”ÌK ÍÛ2”ÌN ÍÛ5”ÌP ÍÛ7”ÌQ ÍÛ8”ÌS ÍÛ:”ÌY ÍÛÌ@”Ì[ ÍÛÌB”Ì\ ÍÛÌC”Ì^ ÍÛÌE–”( ÍÉ”+ ÍÉ”, ÍÜ”8 ÍÜ”9 ÍÜ ”: ÍÜ!”( ÍÉ”+ ÍÉ”, Íİ”; Íİ"”< Íİ#”Ì@ Íİ'”ÌA Íİ(”ÌD Íİ+”ÌI Íİ0”ÌM Íİ4”ÌN Íİ5”ÌX Íİ?”ÌY ÍİÌ@”ÌZ ÍİÌA˜”, ÍŞ”7 ÍŞ”8 ÍŞ ”ÌK ÍŞ3”ÌM ÍŞ5”ÌN ÍŞ6”ÌO ÍŞ7”ÌÀ ÍŞÌO—”( ÍÉ”+ ÍÉ”, Íß”3 Íß”4 Íß”7 Íß”9 Íß ”, Íà”0 Íà”1 Íà”= Íà%”> Íà&”ÌB Íà*”ÌC Íà+”ÌF Íà.”ÌH Íà0”ÌL Íà4”ÌM Íà5”ÌQ Íà9”ÌR Íà:”ÌS Íà;’”( Íá”) Íá–”( ÍÊ”, ÍÊ”4 ÍÊ”8 ÍÊ”9 ÍÊ”= ÍÊ"–”( ÍÊ”, ÍÊ”- ÍË”5 ÍË”6 ÍË”8 ÍËÜ ”( ÍÊ”, ÍÊ”- ÍÌ”6 ÍÌ ”7 ÍÌ!”; ÍÌ%”< ÍÌ&”? ÍÌ)”ÌD ÍÌ.”ÌH ÍÌ2”ÌI ÍÌ3”ÌS ÍÌ=”ÌT ÍÌ>”ÌU ÍÌ?”ÌV ÍÌÌ@”Ìa ÍÌÌK”Ìb ÍÌÌL”Ìp ÍÌÌZ”Ìr ÍÌÌ\”Ìs ÍÌÌ]”Ìt ÍÌÌ^”Ìå ÍÌÌ{Ü ”( ÍÊ”, ÍÊ”- ÍÍ”7 ÍÍ!”8 ÍÍ"”< ÍÍ&”= ÍÍ'”Ì@ ÍÍ*”ÌE ÍÍ/”ÌI ÍÍ3”ÌJ ÍÍ4”ÌT ÍÍ>”ÌU ÍÍ?”ÌV ÍÍÌ@”ÌW ÍÍÌA”Ìa ÍÍÌK”Ìb ÍÍÌL”Ìh ÍÍÌR”Ìi ÍÍÌS”Ìj ÍÍÌT”Ìk ÍÍÌU”Ìu ÍÍÌ_”Ìv ÍÍÌ`”Ì} ÍÍÌg’”$ ÍÊ”( ÍÊ’”( ÍÏ”- ÍÏ’”$ ÍÏ”) ÍÏš”( ÍÑ”, ÍÑ”0 ÍÑ”1 ÍÑ”4 ÍÑ ”9 ÍÑ%”= ÍÑ)”> ÍÑ*”ÌH ÍÑ4”ÌJ ÍÑ6””4 ÍÒ”8 ÍÒ”Ì@ ÍÒ”ÌD ÍÒ–”4 ÍÒ”8 ÍÒ”9 ÍÓ”ÌA ÍÓ!”ÌB ÍÓ"”ÌD ÍÓ$™”4 ÍÒ”8 ÍÒ”9 ÍÔ”ÌB ÍÔ"”ÌC ÍÔ#”ÌN ÍÔ.”ÌO ÍÔ/”Ì] ÍÔ=”Ì_ ÍÔ?™”4 ÍÒ”8 ÍÒ”9 ÍÕ”ÌH ÍÕ(”ÌI ÍÕ)”ÌT ÍÕ4”ÌU ÍÕ5”Ìh ÍÕÌH”Ìj ÍÕÌJ–”4 ÍÒ”8 ÍÒ”9 ÍÖ”ÌE ÍÖ%”ÌF ÍÖ&”ÌG ÍÖ'Ü ”4 ÍÒ”8 ÍÒ”9 Í×”Ì@ Í×”ÌA Í×	”ÌC Í×”ÌG Í×”ÌI Í×”ÌJ Í×”ÌL Í×”ÌQ Í×”ÌS Í×”ÌT Í×”ÌV Í×”ÌY Í×!”Ì[ Í×#”Ì\ Í×$”Ì^ Í×&”Ìd Í×,”Ìf Í×.”Ìg Í×/”Ìi Í×1’”0 ÍÒ”4 ÍÒ‘”) ÍØ‘”) ÍØ’”$ ÍÉ”' ÍÉ”ÌC ÍÈ”ÌK ÍÈ ”ÌL ÍÈ!”ÌQ ÍÈ&”Ìk Íâ”Ìl Íâ”Ìp Íâ&”Ìr Íâ(”Ìt Íâ*”Ìu Íâ+”Ìy Íâ/”Ìz Íâ0”Ì| Íâ2’” ÍÇ”0 ÍÇ$’” ÍÈ”# ÍÈ”; Í¾”? Í¾”Ì@ Í¾”ÌR Í¾-”Ìl Íã”Ìm Íã”Ìu Íã,”Ìw Íã.”Ìy Íã0”Ìz Íã1”Ì‚ Íã9”Ìƒ Íã:”Ì‡ Íã>’” Í¾” Í¾’” Í½” Í½’” Í¼
+” Í¼’” Í»” Í»‘” Íò’” Íô”  Íô‘” Íò’” Íô”  Íô’” Íõ” Íõ’” Íô”  Íô–” Íõ” Íõ” Í'” Í'” Í'”  Í'’” Íô”  Íô–” Íõ” Íõ” Í(” Í(” Í(” Í(Ü ” Íö” Íö” Íö” Íö” Íö” Íö”" Íö”# Íö”- Íö"”/ Íö$”9 Íö.”; Íö0”? Íö4”Ì@ Íö5”ÌJ Íö?”ÌL ÍöÌA–” Íö” Íö” Í÷” Í÷” Í÷” Í÷–” Íö” Íö” Íø” Íø” Íø” Íø–” Íö” Íö” Íù”  Íù”! Íù”% Íù –” Íö” Íö” Íú”  Íú”! Íú”% Íú –” Íö” Íö” Íû”! Íû”" Íû”& Íû!–” Íö” Íö” Íü” Íü” Íü”  Íü–” Íö” Íö” Íı” Íı” Íı” Íı–” Íö” Íö” Íş” Íş” Íş”# Íş˜” Íö” Íö” Íÿ” Íÿ” Íÿ”# Íÿ”$ Íÿ”' Íÿ"–” Íö” Íö” Í ”) Í $”* Í %”/ Í *–” Íö” Íö” Í”' Í"”( Í#”- Í(˜” Íö” Íö” Í” Í”< Í”Ì@ Í”ÌA Í ”ÌK Í*˜” Íö” Íö” Í” Í” Í” Í” Í”) Í$œ” Íö” Íö” Í” Í”  Í”$ Í”% Í ”0 Í+”5 Í0”Ì@ Í;”ÌA Í<”ÌC Í>” Íö” Íö” Í” Í” Í” Í” Í”! Í”" Í”& Í!”' Í"”5 Í0”7 Í2—” Íö” Íö” Í” Í” Í” Í” Í–” Í” Í” Í” Í”% Í!”' Í#—” Í” Í” Í”% Í”( Í"”- Í'”. Í(‘” Í	’” Í
+
+” Í
+—” Íö” Íö” Í”$ Í”% Í ”( Í#”* Í%–” Í” Í” Í”' Í#”) Í%”* Í&’” Í
+” Í™” Íö” Íö” Í”# Í”$ Í”% Í ”* Í%”, Í'”. Í)”” Í” Í” Í” ÍŸ” Í” Í” Í”! Í”" Í”' Í!”( Í"”- Í'”. Í(”5 Í/”6 Í0”ÌK ÍÌE”ÌM ÍÌG”ÌN ÍÌH”ÌO ÍÌI‘” Í’” Í
+” Í™” Íö” Íö” Í” Í” Í” Í”" Í”$ Í”& Í!”” Í” Í” Í” Í—” Í” Í” Í”" Í”% Í”) Í#”* Í$‘” Í’” Í
+” Í—” Íö” Íö” Í” Í” Í” Í” Í—” Í” Í” Í” Í”! Í”& Í"”' Í#Ÿ” Í” Í” Í” Í”! Í”% Í!”& Í"”0 Í,”1 Í-”; Í7”< Í8”= Í9”> Í:”? Í;”Ì@ Í<” Í” Í” Í”! Í”$ Í ”( Í$”) Í%”3 Í/”4 Í0”> Í:”? Í;”Ì@ Í<”ÌA Í=”ÌB Í>˜” Í” Í” Í”& Í"”' Í#”( Í$”) Í%”* Í&’” Í
+” Í™” Íö” Íö” Í” Í” Í”  Í”% Í ”' Í"”) Í$”” Í” Í” Í” Í—” Í ” Í ” Í ”" Í ”% Í ”* Í $”+ Í %‘” Í!’” Í"
+” Í"—” Íö” Íö” Í#” Í#” Í#”" Í#”$ Í#œ” Í$” Í$” Í$” Í$”  Í$”' Í$#”( Í$$”, Í$(”- Í$)”7 Í$3”8 Í$4”9 Í$5’” Í%
+” Í%’” Íô” Íô’” Íõ” Íõ’” Íc” Íc
+‘” Í-ÔrH–§version¤file§sources®sourcesContent¥names¨mappingsÀ‘À‘ÀÜ)‘”    ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”  	 ‘”  
+ ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”    ‘”  ! ‘”  " ‘”  # ‘”  $ ‘”  % ‘”  & ‘”  ' ‘”  ( ‘”  ) ‘”  * ‘”  + ‘”  , ‘”  - ‘”  . ‘”  / ‘”  0 ‘”  1 ‘”  2 ‘”  3 ‘”  4 ‘”  5 ‘”  6 ‘”  7 ‘”  8 ‘”  9 ‘”  : ‘”  ; ‘”  < ‘”  = ‘”  > ‘”  ? ‘”  Ì@ ‘”  ÌA ‘”  ÌB ‘”  ÌC ‘”  ÌD ‘”  ÌE ‘”  ÌF ‘”  ÌG ‘”  ÌH ‘”  ÌI ‘”  ÌJ ‘”  ÌK ‘”  ÌL ‘”  ÌM ‘”  ÌN ‘”  ÌO ‘”  ÌP ‘”  ÌQ ‘”  ÌR ‘”  ÌS ‘”  ÌT ‘”  ÌU ‘”  ÌV ‘”  ÌW ‘”  ÌX ‘”  ÌY ‘”  ÌZ ‘”  Ì[ ‘”  Ì\ ‘”  Ì] ‘”  Ì^ ‘”  Ì_ ‘”  Ì` ‘”  Ìa ‘”  Ìb ‘”  Ìc ‘”  Ìd ‘”  Ìe ‘”  Ìf ‘”  Ìg ‘”  Ìh ‘”  Ìi ‘”  Ìj ‘”  Ìk ‘”  Ìl ‘”  Ìm ‘”  Ìn ‘”  Ìo ‘”  Ìp ‘”  Ìq ‘”  Ìr ‘”  Ìs ‘”  Ìt ‘”  Ìu ‘”  Ìv ‘”  Ìw ‘”  Ìx ‘”  Ìy ‘”  Ìz ‘”  Ì{ ‘”  Ì| ‘”  Ì} ‘”  Ì~ ‘”  Ì ‘”  Ì€ ‘”  Ì ‘”  Ì‚ ‘”  Ìƒ ‘”  Ì„ ‘”  Ì… ‘”  Ì† ‘”  Ì‡ ‘”  Ìˆ ‘”  Ì‰ ‘”  ÌŠ ‘”  Ì‹ ‘”  ÌŒ ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì‘ ‘”  Ì’ ‘”  Ì“ ‘”  Ì” ‘”  Ì• ‘”  Ì– ‘”  Ì— ‘”  Ì˜ ‘”  Ì™ ‘”  Ìš ‘”  Ì› ‘”  Ìœ ‘”  Ì ‘”  Ì ‘”  ÌŸ ‘”  Ì  ‘”  Ì¡ ‘”  Ì¢ ‘”  Ì£ ‘”  Ì¤ ‘”  Ì¥ ‘”  Ì¦ ‘”  Ì§ ‘”  Ì¨ ‘”  Ì© ‘”  Ìª ‘”  Ì« ‘”  Ì¬ ‘”  Ì­ ‘”  Ì® ‘”  Ì¯ ‘”  Ì° ‘”  Ì± ‘”  Ì² ‘”  Ì³ ‘”  Ì´ ‘”  Ìµ ‘”  Ì¶ ‘”  Ì· ‘”  Ì¸ ‘”  Ì¹ ‘”  Ìº ‘”  Ì» ‘”  Ì¼ ‘”  Ì½ ‘”  Ì¾ ‘”  Ì¿ ‘”  ÌÀ ‘”  ÌÁ ‘”  ÌÂ ‘”  ÌÃ ‘”  ÌÄ ‘”  ÌÅ ‘”  ÌÆ ‘”  ÌÇ ‘”  ÌÈ ‘”  ÌÉ ‘”  ÌÊ ‘”  ÌË ‘”  ÌÌ ‘”  ÌÍ ‘”  ÌÎ ‘”  ÌÏ ‘”  ÌĞ ‘”  ÌÑ ‘”  ÌÒ ‘”  ÌÓ ‘”  ÌÔ ‘”  ÌÕ ‘”  ÌÖ ‘”  Ì× ‘”  ÌØ ‘”  ÌÙ ‘”  ÌÚ ‘”  ÌÛ ‘”  ÌÜ ‘”  Ìİ ‘”  ÌŞ ‘”  Ìß ‘”  Ìà ‘”  Ìá ‘”  Ìâ ‘”  Ìã ‘”  Ìä ‘”  Ìå ‘”  Ìæ ‘”  Ìç ‘”  Ìè ‘”  Ìé ‘”  Ìê ‘”  Ìë ‘”  Ìì ‘”  Ìí ‘”  Ìî ‘”  Ìï ‘”  Ìğ ‘”  Ìñ ‘”  Ìò ‘”  Ìó ‘”  Ìô ‘”  Ìõ ‘”  Ìö ‘”  Ì÷ ‘”  Ìø ‘”  Ìù ‘”  Ìú ‘”  Ìû ‘”  Ìü ‘”  Ìı ‘”  Ìş ‘”  Ìÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
+ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ‘”  Í) ‘”  Í* ‘”  Í+ ‘”  Í, ‘”  Í- ‘”  Í. ‘”  Í/ ‘”  Í0 ‘”  Í1 ‘”  Í2 ‘”  Í3 ‘”  Í4 ‘”  Í5 ‘”  Í6 ‘”  Í7 ‘”  Í8 ‘”  Í9 ‘”  Í: ‘”  Í; ‘”  Í< ‘”  Í= ‘”  Í> ‘”  Í? ‘”  Í@ ‘”  ÍA ‘”  ÍB ‘”  ÍC ‘”  ÍD ‘”  ÍE ‘”  ÍF ‘”  ÍG ‘”  ÍH ‘”  ÍI ‘”  ÍJ ‘”  ÍK ‘”  ÍL ‘”  ÍM ‘”  ÍN ‘”  ÍO ‘”  ÍP ‘”  ÍQ ‘”  ÍR ‘”  ÍS ‘”  ÍT ‘”  ÍU ‘”  ÍV ‘”  ÍW ‘”  ÍX ‘”  ÍY ‘”  ÍZ ‘”  Í[ ‘”  Í\ ‘”  Í] ‘”  Í^ ‘”  Í_ ‘”  Í` ‘”  Ía ‘”  Íb ‘”  Íc ‘”  Íd ‘”  Íe ‘”  Íf ‘”  Íg ‘”  Íh ‘”  Íi ‘”  Íj ‘”  Ík ‘”  Íl ‘”  Ím ‘”  Ín ‘”  Ío ‘”  Íp ‘”  Íq ‘”  Ír ‘”  Ís ‘”  Ít ‘”  Íu ‘”  Ív ‘”  Íw ‘”  Íx ‘”  Íy ‘”  Íz ‘”  Í{ ‘”  Í| ‘”  Í} ‘”  Í~ ‘”  Í ‘”  Í€ ‘”  Í ‘”  Í‚ ‘”  Íƒ ‘”  Í„ ‘”  Í… ‘”  Í† ‘”  Í‡ ‘”  Íˆ ‘”  Í‰ ‘”  ÍŠ ‘”  Í‹ ‘”  ÍŒ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í‘ ‘”  Í’ ‘”  Í“ ‘”  Í” ‘”  Í• ‘”  Í– ‘”  Í— ‘”  Í˜ ‘”  Í™ ‘”  Íš ‘”  Í› ‘”  Íœ ‘”  Í ‘”  Í ‘”  ÍŸ ‘”  Í  ‘”  Í¡ ‘”  Í¢ ‘”  Í£ ‘”  Í¤ ‘”  Í¥ ‘”  Í¦ ‘”  Í§ ‘”  Í¨ ‘”  Í© ‘”  Íª ‘”  Í« ‘”  Í¬ ‘”  Í­ ‘”  Í® ‘”  Í¯ ‘”  Í° ‘”  Í± ‘”  Í² ‘”  Í³ ‘”  Í´ ‘”  Íµ ‘”  Í¶ ‘”  Í· ‘”  Í¸ ‘”  Í¹ ‘”  Íº ‘”  Í» ‘”  Í¼ ‘”  Í½ ‘”  Í¾ ‘”  Í¿ ‘”  ÍÀ ‘”  ÍÁ ‘”  ÍÂ ‘”  ÍÃ ‘”  ÍÄ ‘”  ÍÅ ‘”  ÍÆ ‘”  ÍÇ ‘”  ÍÈ ‘”  ÍÉ ‘”  ÍÊ ‘”  ÍË ‘”  ÍÌ ‘”  ÍÍ ‘”  ÍÎ ‘”  ÍÏ ‘”  ÍĞ ‘”  ÍÑ ‘”  ÍÒ ‘”  ÍÓ ‘”  ÍÔ ‘”  ÍÕ ‘”  ÍÖ ‘”  Í× ‘”  ÍØ ‘”  ÍÙ ‘”  ÍÚ ‘”  ÍÛ ‘”  ÍÜ ‘”  Íİ ‘”  ÍŞ ‘”  Íß ‘”  Íà ‘”  Íá ‘”  Íâ ‘”  Íã ‘”  Íä ‘”  Íå ‘”  Íæ ‘”  Íç ‘”  Íè ‘”  Íé ‘”  Íê ‘”  Íë ‘”  Íì ‘”  Íí ‘”  Íî ‘”  Íï ‘”  Íğ ‘”  Íñ ‘”  Íò ‘”  Íó ‘”  Íô ‘”  Íõ ‘”  Íö ‘”  Í÷ ‘”  Íø ‘”  Íù ‘”  Íú ‘”  Íû ‘”  Íü ‘”  Íı ‘”  Íş ‘”  Íÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
+ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ‘”  Í) ‘”  Í* ‘”  Í+ ‘”  Í, ‘”  Í- ‘”  Í. ‘”  Í/ ‘”  Í0 ‘”  Í1 ‘”  Í2 ‘”  Í3 ‘”  Í4 ‘”  Í5 ‘”  Í6 ‘”  Í7 ‘”  Í8 ‘”  Í9 ‘”  Í: ‘”  Í; ‘”  Í< ‘”  Í= ‘”  Í> ‘”  Í? ‘”  Í@ ‘”  ÍA ‘”  ÍB ‘”  ÍC ‘”  ÍD ‘”  ÍE ‘”  ÍF ‘”  ÍG ‘”  ÍH ‘”  ÍI ‘”  ÍJ ‘”  ÍK ‘”  ÍL ‘”  ÍM ‘”  ÍN ‘”  ÍO ‘”  ÍP ‘”  ÍQ ‘”  ÍR ‘”  ÍS ‘”  ÍT ‘”  ÍU ‘”  ÍV ‘”  ÍW ‘”  ÍX ‘”  ÍY ‘”  ÍZ ‘”  Í[ ‘”  Í\ ‘”  Í] ‘”  Í^ ‘”  Í_ ‘”  Í` ‘”  Ía ‘”  Íb ‘”  Íc ‘”  Íd ‘”  Íe ‘”  Íf ‘”  Íg ‘”  Íh ‘”  Íi ‘”  Íj ‘”  Ík ‘”  Íl ‘”  Ím ‘”  Ín ‘”  Ío ‘”  Íp ‘”  Íq ‘”  Ír ‘”  Ís ‘”  Ít ‘”  Íu ‘”  Ív ‘”  Íw ‘”  Íx ‘”  Íy ‘”  Íz ‘”  Í{ ‘”  Í| ‘”  Í} ‘”  Í~ ‘”  Í ‘”  Í€ ‘”  Í ‘”  Í‚ ‘”  Íƒ ‘”  Í„ ‘”  Í… ‘”  Í† ‘”  Í‡ ‘”  Íˆ ‘”  Í‰ ‘”  ÍŠ ‘”  Í‹ ‘”  ÍŒ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í‘ ‘”  Í’ ‘”  Í“ ‘”  Í” ‘”  Í• ‘”  Í– ‘”  Í— ‘”  Í˜ ‘”  Í™ ‘”  Íš ‘”  Í› ‘”  Íœ ‘”  Í ‘”  Í ‘”  ÍŸ ‘”  Í  ‘”  Í¡ ‘”  Í¢ ‘”  Í£ ‘”  Í¤ ‘”  Í¥ ‘”  Í¦ ‘”  Í§ ‘”  Í¨ ‘”  Í© ‘”  Íª ‘”  Í« ‘”  Í¬ ‘”  Í­ ‘”  Í® ‘”  Í¯ ‘”  Í° ‘”  Í± ‘”  Í² ‘”  Í³ ‘”  Í´ ‘”  Íµ ‘”  Í¶ ‘”  Í· ‘”  Í¸ ‘”  Í¹ ‘”  Íº ‘”  Í» ‘”  Í¼ ‘”  Í½ ‘”  Í¾ ‘”  Í¿ ‘”  ÍÀ ‘”  ÍÁ ‘”  ÍÂ ‘”  ÍÃ ‘”  ÍÄ ‘”  ÍÅ ‘”  ÍÆ ‘”  ÍÇ ‘”  ÍÈ ‘”  ÍÉ ‘”  ÍÊ ‘”  ÍË ‘”  ÍÌ ‘”  ÍÍ ‘”  ÍÎ ‘”  ÍÏ ‘”  ÍĞ ‘”  ÍÑ ‘”  ÍÒ ‘”  ÍÓ ‘”  ÍÔ ‘”  ÍÕ ‘”  ÍÖ ‘”  Í× ‘”  ÍØ ‘”  ÍÙ ‘”  ÍÚ ‘”  ÍÛ ‘”  ÍÜ ‘”  Íİ ‘”  ÍŞ ‘”  Íß ‘”  Íà ‘”  Íá ‘”  Íâ ‘”  Íã ‘”  Íä ‘”  Íå ‘”  Íæ ‘”  Íç ‘”  Íè ‘”  Íé ‘”  Íê ‘”  Íë ‘”  Íì ‘”  Íí ‘”  Íî ‘”  Íï ‘”  Íğ ‘”  Íñ ‘”  Íò ‘”  Íó ‘”  Íô ‘”  Íõ ‘”  Íö ‘”  Í÷ ‘”  Íø ‘”  Íù ‘”  Íú ‘”  Íû ‘”  Íü ‘”  Íı ‘”  Íş ‘”  Íÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
+ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ÔrI’§missing¦pluginÃ¦genAbcÂÔ  ÔrJ”²dynamicImportCache¹exportAllDeclarationCache»exportNamedDeclarationCache«importCache˜ÔrK•¤type¥start£endªspecifiers¦source±ImportDeclarationÌ€Ì¨‘ÔrL”¤type¥start£end¥local¶ImportDefaultSpecifierÌ‡ÌÔrM”¤type¥start£end¤nameªIdentifierÌ‡Ì§webviewÔrN•¤type¥start£end¥value£raw§LiteralÌ”Ì§±@ohos.web.webview³"@ohos.web.webview"K±ImportDeclarationÌªÌÌ‘L¶ImportDefaultSpecifierÌ±Ì·MªIdentifierÌ±Ì·¦routerN§LiteralÌ½ÌË¬@ohos.router®"@ohos.router"K±ImportDeclarationÌÎÌğ‘L¶ImportDefaultSpecifierÌÕÌÛMªIdentifierÌÕÌÛ¦windowN§LiteralÌáÌï¬@ohos.window®"@ohos.window"K±ImportDeclarationÌòÍ‘L¶ImportDefaultSpecifierÌùÍMªIdentifierÌùÍªdeviceInfoN§LiteralÍ	Í°@ohos.deviceInfo²"@ohos.deviceInfo"K±ImportDeclarationÍÍV‘L¶ImportDefaultSpecifierÍ%Í6MªIdentifierÍ%Í6±abilityAccessCtrlN§LiteralÍ<ÍU·@ohos.abilityAccessCtrl¹"@ohos.abilityAccessCtrl"K±ImportDeclarationÍXÍ¤‘L¶ImportDefaultSpecifierÍ_ÍtMªIdentifierÍ_ÍtµConfigurationConstantN§LiteralÍzÍ£Ù'@ohos.app.ability.ConfigurationConstantÙ)"@ohos.app.ability.ConfigurationConstant"K±ImportDeclarationÍ¦Íñ’ÔrO•¤type¥start£end¨imported¥local¯ImportSpecifierÍ¯Í¿MªIdentifierÍ¯Í¿°DEFAULT_AI_TOOLSMªIdentifierÍ¯Í¿°DEFAULT_AI_TOOLSO¯ImportSpecifierÍÁÍÕMªIdentifierÍÁÍÕ´DEFAULT_SEARCH_TOOLSMªIdentifierÍÁÍÕ´DEFAULT_SEARCH_TOOLSN§LiteralÍİÍğ±../model/ToolData³'../model/ToolData'K±ImportDeclarationÍóÍ'‘O¯ImportSpecifierÍüÍMªIdentifierÍüÍ«ThemeHelperMªIdentifierÍüÍ«ThemeHelperN§LiteralÍÍ&µ../common/ThemeHelper·'../common/ThemeHelper'

@@ -1,0 +1,15 @@
+{
+  "app": {
+    "bundleName": "com.aitransformer.bowenapp",
+    "vendor": "AI一站清",
+    "versionCode": 11000000,
+    "versionName": "11.0.0",
+    "icon": "$media:app_layered_image",
+    "label": "$string:label",
+    "minAPIVersion": 23,
+    "targetAPIVersion": 23,
+    "car": {
+      "minAPIVersion": 23
+    }
+  }
+}

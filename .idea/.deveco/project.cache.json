@@ -1,0 +1,16 @@
+{
+	"CommonInfo":{
+		"project.ide.version":"6.1.1.290",
+		"current.select.product":"default",
+		"current.select.buildMode":"release",
+		"crossplatform.projectType":""
+	},
+	"BuildOptions":{
+		"SELECT_BUILD_PRODUCT":"default",
+		"BUNDLE_NAME":"com.aitransformer.bowenapp",
+		"BUILD_PATH":{
+			"OUTPUT_PATH":"C:\\Users\\a1519\\Documents\\AItransformer_arkts_version\\aitransformer_arkts\\build\\outputs\\default"
+		},
+		"SELECT_BUILD_MODE":"release"
+	}
+}
